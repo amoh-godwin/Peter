@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+# To you alone oh, The Father of Jesus, our Lord. I give Glory. Forever and
+# Ever, AAAAAAMEN
+import time
 class Header():
     
     """
@@ -14,6 +16,7 @@ class Header():
 
     def __init__(self):
         super.__self__
+        self.server_name = "Server: Peter (Py/3.6.1)"
         self.host = ''
         self.port = 0
         self.content_length = "0"
@@ -28,14 +31,19 @@ class Header():
         #return status, content_length, content_type, date, server
 
         string = ""
-        cookies = {'phpmyadmin': {'phpMyAdmin': "onesdfk", "expires": "Fri, 25-May-2018 09:46:00 GMT", "Max-Age": "2592000", "path": "/phk/jhkl/"},
-         'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
+        #cookies = {'phpmyadmin': {'phpMyAdmin': "onesdfk", "expires": "Fri, 25-May-2018 09:46:00 GMT", "Max-Age": "2592000", "path": "/phk/jhkl/"},
+        # 'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
         
-        string += 'HTTP/1.0 200 OK\nContent-Length: 414\r\nContent-type: text/html; charset=utf-8\r\nDate: Sun, 22 Apr 2018 15:45:36 GMT\r\nServer: SimpleHTTP/0.6 Python/3.6.1\n'
-        cookies_str = self._cookie(cookies)
+        string += self._status(200)
+        string += self._contentLength()
+        string += self._contentType()
+        string += self._date()
+        string += self.server_name + "\r\n"
+        #cookies_str = self._cookie(cookies)
+        cookies_str = self._cookie()
         string += cookies_str
         string += '\n'
-        string += '<!Doctype html><html>LoveGod</html>'
+        string += '<!Doctype html><html><h1>Love God</h1></html>'
         return bytes(string, 'utf-8')
 
     def getRequest(self, header):
@@ -118,10 +126,24 @@ class Header():
         print(self.cookies)
 
 
+    def _status(self, digit):
+        string = 'HTTP/1.0 '
+        string += str(digit) + " OK\n"
+        return string
+
+
+    def _date(self):
+        string_time = "Date: "
+        string_time += time.strftime('%a, %d %b %Y %H:%M:%S %Z')
+        return string_time + "\r\n"
+
+
     def _contentLength(self):
 
         self.content_length = "500"
-        return self.content_length
+        string = 'Content-Length: '
+        string += self.content_length + '\r\n'
+        return string
 
 
     def _cookie(self, cookies=None):
@@ -148,3 +170,12 @@ class Header():
                 string += "HttpOnly\r\n"
 
         return string
+
+
+    def _contentType(self, ext=None):
+        string = 'Content-Type: '
+        if ext:
+            pass
+        else:
+            string += 'text/html; charset=utf-8'
+        return string + "\r\n"
