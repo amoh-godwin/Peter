@@ -33,6 +33,7 @@ class Header():
         string = ""
         #cookies = {'phpmyadmin': {'phpMyAdmin': "onesdfk", "expires": "Fri, 25-May-2018 09:46:00 GMT", "Max-Age": "2592000", "path": "/phk/jhkl/"},
         # 'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
+        # phpsess = {'PHPSESSID': {'PHPSESSID': "aluer73j023klsafjk190", "path": '/'}}
         
         string += self._status(200)
         string += self._contentLength()
