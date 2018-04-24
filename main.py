@@ -24,6 +24,7 @@ class Peter(socketserver.BaseRequestHandler):
         #self.request.sendall(self.data)
         # mine
         peter = Header()
+        Header.getRequest(peter, self.data)
         resp = Header.computeResponse(peter)
         self.request.sendall(resp)
 
