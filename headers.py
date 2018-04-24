@@ -2,6 +2,8 @@
 # To you alone oh, The Father of Jesus, our Lord. I give Glory. Forever and
 # Ever, AAAAAAMEN
 import time
+import chardet
+
 class Header():
     
     """
@@ -44,7 +46,7 @@ class Header():
         cookies_str = self._cookie()
         string += cookies_str
         string += '\n'
-        string += '<!Doctype html><html><h1>Love God</h1></html>'
+        string += self._data('index.html')
         return bytes(string, 'utf-8')
 
     def getRequest(self, header):
@@ -180,3 +182,17 @@ class Header():
         else:
             string += 'text/html; charset=utf-8'
         return string + "\r\n"
+
+    def _data(self, file):
+
+
+        with open(file, 'rb') as bbin:
+            read = bbin.read()
+        detection = chardet.detect(read)
+        if detection['confidence'] > 0.99:
+            encoding = detection['encoding']
+        else:
+            encoding = 'ascii'
+        data = read.decode(encoding)
+        return data
+
