@@ -26,7 +26,17 @@ class Header():
 
         # Todo: use these real varibbles
         #return status, content_length, content_type, date, server
-        return bytes('HTTP/1.0 200 OK\nContent-Length: 414\r\nContent-type: text/html; charset=utf-8\r\nDate: Sun, 22 Apr 2018 15:45:36 GMT\r\nServer: SimpleHTTP/0.6 Python/3.6.1\n\n<!Doctype html><html>LoveGod</html>', 'utf-8')
+
+        string = ""
+        cookies = {'phpmyadmin': {'phpMyAdmin': "onesdfk", "expires": "Fri, 25-May-2018 09:46:00 GMT", "Max-Age": "2592000", "path": "/phk/jhkl/"},
+         'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
+        
+        string += 'HTTP/1.0 200 OK\nContent-Length: 414\r\nContent-type: text/html; charset=utf-8\r\nDate: Sun, 22 Apr 2018 15:45:36 GMT\r\nServer: SimpleHTTP/0.6 Python/3.6.1\n'
+        cookies_str = self._cookie(cookies)
+        string += cookies_str
+        string += '\n'
+        string += '<!Doctype html><html>LoveGod</html>'
+        return bytes(string, 'utf-8')
 
     def getRequest(self, header):
 
@@ -115,5 +125,26 @@ class Header():
 
 
     def _cookie(self, cookies=None):
+
+
+        # set string to empty
+        string = ""
+
         if cookies:
-            pass
+
+            # cookie's name in cookies multi-dimensional array
+            for name in cookies:
+
+                string += "Set-Cookie: "
+
+                # set actual cookie as a "cookie": {}
+                cookie = cookies[name]
+
+                # each value that has been listed
+                for val in cookie:
+                    string += val + "=" + str(cookie[val]) + "; "
+
+                # add the httponly
+                string += "HttpOnly\r\n"
+
+        return string
