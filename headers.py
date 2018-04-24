@@ -21,33 +21,62 @@ class Header():
         self.server_name = "Server: Peter (Py/3.6.1)"
         self.host = ''
         self.port = 0
-        self.content_length = "0"
+        self._encoding = ''
+        self._extension = ''
+        self._contentlength = 0
         self.raw_headers = ""
         self.headerPair = {}
+        self.data = ''
+        self._extMap = {'html': 'text/html', 'htm': 'text/html',
+                        'php': 'text/php', 'css': 'text/css',
+                        'gif': 'image/gif', 'json': 'application/json'}
         self.functions = {'Host': self._getHost, 'Cookie': self._getCookies}
         self.cookies = {}
 
     def computeResponse(self):
 
-        # Todo: use these real varibbles
-        #return status, content_length, content_type, date, server
+
+        """
+        Computes the response to be sent back to the browser
+        """
+
 
         string = ""
+
         #cookies = {'phpmyadmin': {'phpMyAdmin': "onesdfk", "expires": "Fri, 25-May-2018 09:46:00 GMT", "Max-Age": "2592000", "path": "/phk/jhkl/"},
         # 'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
-        # phpsess = {'PHPSESSID': {'PHPSESSID': "aluer73j023klsafjk190", "path": '/'}}
-        
+
         string += self._status(200)
+
+        # calculation of the data the we will be sending
+        self._data('index.html')
+
+        # return length of the content that we will be sending
         string += self._contentLength()
+
+        # the type of the content that we will be sending
         string += self._contentType()
-        string += self._date()
+
+        # the Godly name of the Server
         string += self.server_name + "\r\n"
+
+        # the cookies that we will be sending
+        # will return empty is no cookies are requested
         #cookies_str = self._cookie(cookies)
-        cookies_str = self._cookie()
-        string += cookies_str
+        string += self._cookie()
+
+        # the actual date this whole event was completed
+        string += self._date()
+
+        # this kinda ends the response header
         string += '\n'
-        string += self._data('index.html')
+
+        # Here is the actual response data
+        string += self.data
+
+        # encode everything and send it to the browser
         return bytes(string, 'utf-8')
+
 
     def getRequest(self, header):
 
@@ -143,9 +172,9 @@ class Header():
 
     def _contentLength(self):
 
-        self.content_length = "500"
+
         string = 'Content-Length: '
-        string += self.content_length + '\r\n'
+        string += str(self._contentlength) + '\r\n'
         return string
 
 
@@ -175,24 +204,53 @@ class Header():
         return string
 
 
-    def _contentType(self, ext=None):
+    def _contentType(self):
+
+
         string = 'Content-Type: '
-        if ext:
-            pass
+
+        # if the encoding detected was ascii use utf-8 instead
+        if self._encoding == 'ascii':
+            
+            # utf-8 handles a lot more
+            encoding = 'utf-8'
+
+        # use the encoding that was given by chardet
         else:
-            string += 'text/html; charset=utf-8'
+
+            encoding = self._encoding
+
+        # find the extension in the extension map
+        if self._extension in self._extMap:
+
+            # add the corresponding format to the string
+            string += self._extMap[self._extension] + '; '
+
+        string += 'charset='+encoding
+
         return string + "\r\n"
 
     def _data(self, file):
 
 
+        splits = file.split('.')
+
+        self._extension = splits[1]
+
         with open(file, 'rb') as bbin:
             read = bbin.read()
-        detection = chardet.detect(read)
-        if detection['confidence'] > 0.99:
-            encoding = detection['encoding']
-        else:
-            encoding = 'ascii'
-        data = read.decode(encoding)
-        return data
 
+            # set length of the content
+            self._contentlength = len(read)
+
+        detection = chardet.detect(read)
+
+        if detection['confidence'] > 0.99:
+            self._encoding = detection['encoding']
+
+        else:
+            self._encoding = 'ascii'
+
+        self.data = read.decode(self._encoding)
+
+        return
