@@ -194,7 +194,7 @@ class Header():
         bstmt = bytes(string, self._encoding)
 
         # Add its length to the content length that we have
-        content_length = content_length  + len(bstmt)
+        content_length += len(bstmt)
 
         # Now convert the length to a string to find its no of them
         strcontlen = str(content_length)
@@ -203,8 +203,9 @@ class Header():
         lencont = len(strcontlen)
 
         # This will them be the very final length that we are yet to send
-        # The plus two will take care of the \r\n
-        self._content_length = content_length + lencont + 2
+        # The plus five will take care of the \r\n
+        # and the last \n that before actual data and EOF which is \r\n
+        self._content_length = content_length + lencont + 5
 
         # Now we are just continues with the content length string
         string += str(self._content_length) + '\r\n'
