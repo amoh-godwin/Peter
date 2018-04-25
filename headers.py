@@ -23,7 +23,7 @@ class Header():
         self.port = 0
         self._encoding = ''
         self._extension = ''
-        self._contentlength = 0
+        self._content_length = 0
         self.raw_headers = ""
         self.headerPair = {}
         self.data = ''
@@ -51,9 +51,6 @@ class Header():
         # calculation of the data the we will be sending
         self._data('index.html')
 
-        # return length of the content that we will be sending
-        string += self._contentLength()
-
         # the type of the content that we will be sending
         string += self._contentType()
 
@@ -67,6 +64,9 @@ class Header():
 
         # the actual date this whole event was completed
         string += self._date()
+
+        # return length of the content that we will be sending
+        string += self._contentLength(string)
 
         # this kinda ends the response header
         string += '\n'
@@ -170,11 +170,44 @@ class Header():
         return string_time + "\r\n"
 
 
-    def _contentLength(self):
+    def _contentLength(self, resp):
 
+
+        # convert resp to bytes
+        bbin = bytes(resp, self._encoding)
+
+        # here is the len of the resp
+        blen = len(bbin)
+
+        # convert main data to bytes
+        bdata = bytes(self.data, self._encoding)
+
+        # len of data
+        bdatalen = len(bdata)
+
+        # what we have for now
+        content_length = blen + bdatalen
 
         string = 'Content-Length: '
-        string += str(self._contentlength) + '\r\n'
+
+        # convert content_length stmt to bytes
+        bstmt = bytes(string, self._encoding)
+
+        # Add its length to the content length that we have
+        content_length = content_length  + len(bstmt)
+
+        # Now convert the length to a string to find its no of them
+        strcontlen = str(content_length)
+
+        # the length of the decimals
+        lencont = len(strcontlen)
+
+        # This will them be the very final length that we are yet to send
+        # The plus two will take care of the \r\n
+        self._content_length = content_length + lencont + 2
+
+        # Now we are just continues with the content length string
+        string += str(self._content_length) + '\r\n'
         return string
 
 
