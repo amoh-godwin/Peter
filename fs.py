@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # To You Alone Oh Father, I commit myself
 import os
+import chardet
 
 class FileSystem():
 
@@ -22,7 +23,12 @@ class FileSystem():
         self._actual_file = ''
         self._no = 0
         self._steps = []
+        self._depth = 0
+        self.SCRIPTS_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/_scripts"
         self._file_extension = ''
+        self.data = ''
+        self.encoding = ''
+        self.contentLength = 0
 
 
     def _getFileName(self, requested_file):
@@ -53,7 +59,7 @@ class FileSystem():
         del self._steps[0]
 
         # the depth of the path
-        depth = len(self._steps)
+        self._depth = len(self._steps)
 
         # try to open the file
         try:
@@ -64,7 +70,7 @@ class FileSystem():
 
             if self._steps[self._no] == '':
                 self._no += 1
-                print('blank')
+                print('to dir listing')
 
             else:
 
@@ -76,32 +82,14 @@ class FileSystem():
                     item = self.Default_LOCATION + '/' + self._steps[self._no]
 
                     if self._is_dir(item):
-                        print('is dir')
-                        
-                        
+
+                        # check if blank ''
                         self._is_blank(item)
 
-                        """# the depth
-                        no += 1
-
-                        # check if the current no is not blank
-                        if steps[no] != '':
-
-                            print('lets crawl')
-                            # crawl again
-                            # needle is second param
-                            self._crawl(item, steps[no])
-
-                        else:
-
-                            # to dir listing or index.html
-                            print('listing')
-                            pass"""
-
                     else:
+
                         # its a file return it
-                        print('is file')
-                        pass
+                        self._data(item)
 
                 else:
 
@@ -121,18 +109,21 @@ class FileSystem():
     def _crawl(self, path, needle):
         folders = os.listdir(path)
         if needle in folders:
-            
+
+            # make new path
+            item = path + '/' + needle
+
             # find if is file or dir
-            if self._is_dir(path + '/' + needle):
+            if self._is_dir(item):
                 # continue crawling is a dir
                 print('is a dir')
-                self._is_blank(path + '/' + needle)
+                self._is_blank(item)
 
             else:
 
                 # return, it is a file
-                print('is a file')
-                pass
+                # data will be ready in self.data
+                self._data(item)
             
         else:
             
@@ -145,7 +136,11 @@ class FileSystem():
         self._no += 1
 
         # check if the current no is not blank
-        if self._steps[self._no] != '':
+        if self._no == self._depth:
+            
+            self._to_list(path)
+
+        elif self._steps[self._no] != '':
 
             print('lets crawl')
             # crawl again
@@ -155,8 +150,7 @@ class FileSystem():
         else:
 
             # to dir listing or index.html
-            print('listing')
-            pass
+            self._to_list(path + '/' + self._steps[self._no])
 
 
     def _is_dir(self, path):
@@ -167,6 +161,49 @@ class FileSystem():
             return False
 
 
-fs = FileSystem()
-results = FileSystem.search(fs, '/index.html')
-print(results)
+    def _to_list(self, path):
+
+
+        """
+        checks whether this particular path has an index file in it
+        or Peter should go ahead and check the .htaccess for listing perm.
+        """
+
+
+        print(path)
+        files = os.listdir(path)
+
+        if 'index.php' in files:
+
+            # call self._data to handle
+            self._data(path + '/index.php')
+
+        elif 'index.html' in files:
+
+            # call self.data to handle
+            self._data(path + '/index.html')
+
+        else:
+            # htacces or just go ahead to list dir
+            self._data(self.SCRIPTS_LOCATION + '/dir.html' )
+
+
+    def _data(self, file):
+
+        with open(file, 'rb') as bbin:
+            read = bbin.read()
+
+            # set length of the content
+            self.contentlength = len(read)
+
+        detection = chardet.detect(read)
+
+        if detection['confidence'] > 0.99:
+            self.encoding = detection['encoding']
+
+        else:
+            self.encoding = 'ascii'
+
+        self.data = read.decode(self.encoding)
+
+        return
