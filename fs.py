@@ -46,6 +46,11 @@ class FileSystem():
  
         # this are the steps we'll use and depth we have to go
         steps = self._actual_file.split('/')
+
+        # some clean ups
+        del steps[0]
+
+        # the depth of the path
         depth = len(steps)
 
         # try to open the file
@@ -56,8 +61,18 @@ class FileSystem():
             folders = os.listdir(self.Default_LOCATION)
             for item in folders:
                 if steps[no] == '':
+                    # to return index or dir listing
                     pass
+
                 elif item == steps[no]:
+
+                    # to find out if is a file or directory
+                    if self._is_dir(self.Default_LOCATION + '/' + item):
+
+                        # crawl again
+                        pass
+
+                    # its a file return it
                     pass
 
             # status code found
