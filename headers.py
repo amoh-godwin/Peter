@@ -21,6 +21,8 @@ class Header():
         self.server_name = "Server: Peter (Py/3.6.1)"
         self.host = ''
         self.port = 0
+        self.requset_type = ''
+        self.requested_file = ''
         self._encoding = ''
         self._extension = ''
         self._content_length = 0
@@ -49,7 +51,7 @@ class Header():
         string += self._status(200)
 
         # calculation of the data the we will be sending
-        self._data('index.html')
+        self._data(self.requested_file)
 
         # the type of the content that we will be sending
         string += self._contentType()
@@ -92,7 +94,11 @@ class Header():
         
         # Break into individual lines
         lines = self.raw_headers.split('\r\n')
-        
+
+        # This the request either get or post
+        # It does not follow the pairing protocol of the rest
+        self._getFile(lines[0])
+
         # Break into key-value pairs
         for pair in lines:
 
@@ -123,6 +129,7 @@ class Header():
 
     def _getHost(self, hostname_str):
 
+
         """
         Gets Host and its port
 
@@ -132,10 +139,32 @@ class Header():
         # for now just put everything as hostname
         # later we break it
         self.host = hostname_str
-        print(self.host + " Here")
+
+
+    def _getFile(self, req_str):
+
+
+        """
+        """
+
+
+        # strip the http protocol off
+        parsed = req_str[:-8]
+
+        # Strip it by space to avoid escaping the forward-slash
+        # There will be three entries
+        # the last will just be empty
+        splits = parsed.split(' ')
+
+        # the request type (eg. GET or POST)
+        self.requset_type = splits[0]
+
+        # the file requested for
+        self.requested_file = splits[1]
 
 
     def _getCookies(self, cookie_str):
+
 
         """
         Breaks the cookie string into individual cookies

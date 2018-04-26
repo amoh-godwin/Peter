@@ -16,17 +16,37 @@ class Peter(socketserver.BaseRequestHandler):
     """
 
     def handle(self):
-        # self.request is the TCP socket connected to the client
+
+        """
+        This is the handler,
+        
+        handles the request and response from the server
+        """
+
+
+        # self.request is the request from the client
         self.data = self.request.recv(1024).strip()
+
+        # This would be used for logging
         print("{} wrote:".format(self.client_address[0]))
+
+        # The data that the browser came with
+        # basically the request handler
         print(self.data)
-        # just send back the same data, but upper-cased
-        #self.request.sendall(self.data)
-        # mine
+
+        # Initialise the header class
         peter = Header()
+
+        # send the request to be proccesed
         Header.getRequest(peter, self.data)
+
+        # This is the response from the server
+        # to the browser
         resp = Header.computeResponse(peter)
+
+        # Send the complete data to the browser
         self.request.sendall(resp)
+
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999
