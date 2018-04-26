@@ -69,8 +69,7 @@ class FileSystem():
             self._no = 0
 
             if self._steps[self._no] == '':
-                self._no += 1
-                print('to dir listing')
+                self._to_list(self.Default_LOCATION)
 
             else:
 
@@ -115,8 +114,8 @@ class FileSystem():
 
             # find if is file or dir
             if self._is_dir(item):
+
                 # continue crawling is a dir
-                print('is a dir')
                 self._is_blank(item)
 
             else:
@@ -142,7 +141,6 @@ class FileSystem():
 
         elif self._steps[self._no] != '':
 
-            print('lets crawl')
             # crawl again
             # needle is second param
             self._crawl(path, self._steps[self._no])
@@ -170,7 +168,6 @@ class FileSystem():
         """
 
 
-        print(path)
         files = os.listdir(path)
 
         if 'index.php' in files:
