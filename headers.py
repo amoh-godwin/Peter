@@ -30,7 +30,7 @@ class Header():
         self.headerPair = {}
         self.data = ''
         self._extMap = {'html': 'text/html', 'htm': 'text/html',
-                        'php': 'text/php', 'css': 'text/css',
+                        'php': 'text/html', 'css': 'text/css',
                         'gif': 'image/gif', 'json': 'application/json'}
         self.functions = {'Host': self._getHost, 'Cookie': self._getCookies}
         self.cookies = {}
@@ -191,8 +191,6 @@ class Header():
 
             # Add the key-value pairs to the cookies variable
             self.cookies[pairs[0]] = pairs[1]
-
-        print(self.cookies)
 
 
     def _status(self, digit):

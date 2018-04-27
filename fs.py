@@ -2,6 +2,7 @@
 # To You Alone Oh Father, I commit myself
 import os
 import chardet
+from external import directory, run
 
 class FileSystem():
 
@@ -22,6 +23,7 @@ class FileSystem():
         self.Default_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server"
         self.status_code = 200
         self._actual_file = ''
+        self._query_string = ''
         self._no = 0
         self._steps = []
         self._depth = 0
@@ -38,6 +40,10 @@ class FileSystem():
         # first split to reveal query if any
         # query will be in the second one without the '?' if any
         splits = requested_file.split('?')
+
+        # query should be here
+        if len(splits) > 1:
+            self._query_string = splits[1]
 
         # whether or not is a query we are still taken the file only
         self._actual_file = splits[0]
@@ -140,7 +146,7 @@ class FileSystem():
 
         # check if the current no is not blank
         if self._no == self._depth:
-            
+
             self._to_list(path)
 
         elif self._steps[self._no] != '':
@@ -176,15 +182,24 @@ class FileSystem():
 
         if 'index.php' in files:
 
+            # file extension sure contains gibberish
+            self._file_extension = 'php'
+
             # call self._data to handle
             self._data(path + '/index.php')
 
         elif 'index.html' in files:
 
+            # file extension sure contains gibberish
+            self._file_extension = 'html'
+
             # call self.data to handle
             self._data(path + '/index.html')
 
         elif '.htaccess' in files:
+
+            # file extension sure contains gibberish
+            self._file_extension = 'html'
 
             # call to permission reader
             with open(path + '/.htaccess', mode='rb') as ht:
@@ -202,18 +217,39 @@ class FileSystem():
                 self._data(self.SCRIPTS_LOCATION + '/dir.html')
 
         else:
+
+            # file extension sure contains gibberish
+            #self._file_extension = 'php'
+
             # htacces or just go ahead to list dir
             self._data(self.SCRIPTS_LOCATION + '/dir.html' )
 
 
     def _data(self, file):
 
-        with open(file, 'rb') as bbin:
-            read = bbin.read()
+        # check the file extension for php
+        if self._file_extension == 'php':
+
+            # setting the directory to directory
+            directory
+
+            # run with php and with the query
+            read = run(file, self._query_string)
 
             # set length of the content
             self.contentlength = len(read)
 
+        else:
+
+            # file is not php
+            with open(file, 'rb') as bbin:
+                read = bbin.read()
+    
+                # set length of the content
+                self.contentlength = len(read)
+
+
+        # continue with encoding
         detection = chardet.detect(read)
 
         if detection['confidence'] > 0.99:
