@@ -2,7 +2,7 @@
 # To you alone oh, The Father of Jesus, our Lord. I give Glory. Forever and
 # Ever, AAAAAAMEN
 import time
-import chardet
+from fs import FileSystem
 
 class Header():
     
@@ -48,10 +48,18 @@ class Header():
         #cookies = {'phpmyadmin': {'phpMyAdmin': "onesdfk", "expires": "Fri, 25-May-2018 09:46:00 GMT", "Max-Age": "2592000", "path": "/phk/jhkl/"},
         # 'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
 
-        string += self._status(200)
-
         # calculation of the data the we will be sending
-        self._data(self.requested_file)
+        Files = FileSystem()
+        Files.search(self.requested_file)
+
+        # All variables
+        self.data = Files.data
+        self._encoding = Files.encoding
+        self._extension = Files._file_extension
+        status_code = Files.status_code
+
+        # status code
+        string += self._status(status_code)
 
         # the type of the content that we will be sending
         string += self._contentType()
@@ -211,7 +219,7 @@ class Header():
         # convert main data to bytes
         bdata = bytes(self.data, self._encoding)
 
-        # len of data
+        # len of data from outside
         bdatalen = len(bdata)
 
         # what we have for now
@@ -292,28 +300,3 @@ class Header():
         string += 'charset='+encoding
 
         return string + "\r\n"
-
-    def _data(self, file):
-
-
-        splits = file.split('.')
-
-        self._extension = splits[1]
-
-        with open(file, 'rb') as bbin:
-            read = bbin.read()
-
-            # set length of the content
-            self._contentlength = len(read)
-
-        detection = chardet.detect(read)
-
-        if detection['confidence'] > 0.99:
-            self._encoding = detection['encoding']
-
-        else:
-            self._encoding = 'ascii'
-
-        self.data = read.decode(self._encoding)
-
-        return

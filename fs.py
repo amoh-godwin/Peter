@@ -20,14 +20,15 @@ class FileSystem():
 
         super.__self__
         self.Default_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server"
+        self.status_code = 200
         self._actual_file = ''
         self._no = 0
         self._steps = []
         self._depth = 0
         self.SCRIPTS_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/_scripts"
-        self._file_extension = ''
+        self._file_extension = 'html'
         self.data = ''
-        self.encoding = ''
+        self.encoding = 'ascii'
         self.contentLength = 0
 
 
@@ -93,16 +94,18 @@ class FileSystem():
                 else:
 
                     # will couldn't find the file in the nest
-                    print('see the 404')
-                    pass
+                    self.status_code = 404
+                    return self.status_code
 
             # status code found
-            return 302
+            self.status_code = 302
+            return self.status_code
 
         except:
 
             # status code not found
-            return 404
+            self.status_code = 404
+            return self.status_code
 
 
     def _crawl(self, path, needle):
@@ -127,7 +130,8 @@ class FileSystem():
         else:
             
             # we couldn't find it means we have ended
-            print('another error 404')
+            self.status_code = 404
+            return
 
     def _is_blank(self, path):
 
@@ -179,6 +183,23 @@ class FileSystem():
 
             # call self.data to handle
             self._data(path + '/index.html')
+
+        elif '.htaccess' in files:
+
+            # call to permission reader
+            with open(path + '/.htaccess', mode='rb') as ht:
+                data = ht.read()
+
+            # working on the file line by line
+            if b'Options -Indexes' in data:
+
+                # returnt the 403 document instead
+                self._data(self.SCRIPTS_LOCATION + '/403.html')
+                
+            else:
+
+                # sure we're going to list
+                self._data(self.SCRIPTS_LOCATION + '/dir.html')
 
         else:
             # htacces or just go ahead to list dir
