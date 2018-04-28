@@ -167,8 +167,11 @@ class Header():
         # the request type (eg. GET or POST)
         self.requset_type = splits[0]
 
-        # the file requested for
-        self.requested_file = splits[1]
+        # to avoid an index error
+        if len(splits) > 1:
+
+            # the file requested for
+            self.requested_file = splits[1]
 
 
     def _getCookies(self, cookie_str):
