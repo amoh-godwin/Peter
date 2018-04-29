@@ -20,10 +20,11 @@ class FileSystem():
 
 
         super.__self__
+        self.request_method = ''
         self.Default_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server"
         self.status_code = 200
         self._actual_file = ''
-        self._query_string = ''
+        self.query_string = ''
         self._no = 0
         self._steps = []
         self._depth = 0
@@ -43,7 +44,7 @@ class FileSystem():
 
         # query should be here
         if len(splits) > 1:
-            self._query_string = splits[1]
+            self.query_string = splits[1]
 
         # whether or not is a query we are still taken the file only
         self._actual_file = splits[0]
@@ -234,7 +235,7 @@ class FileSystem():
             directory
 
             # run with php and with the query
-            read = run(file, self._query_string)
+            read = run(file, self.query_string, self.request_method)
 
             # set length of the content
             self.contentlength = len(read)

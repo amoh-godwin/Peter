@@ -21,7 +21,7 @@ class Header():
         self.server_name = "Server: Peter (Py/3.6.1)"
         self.host = ''
         self.port = 0
-        self.requset_type = ''
+        self.request_method = ''
         self.requested_file = ''
         self._encoding = ''
         self._extension = ''
@@ -50,6 +50,7 @@ class Header():
 
         # calculation of the data the we will be sending
         Files = FileSystem()
+        Files.request_method = self.request_method
         Files.search(self.requested_file)
 
         # All variables
@@ -164,8 +165,8 @@ class Header():
         # the last will just be empty
         splits = parsed.split(' ')
 
-        # the request type (eg. GET or POST)
-        self.requset_type = splits[0]
+        # the request method (eg. GET or POST)
+        self.request_method = splits[0]
 
         # to avoid an index error
         if len(splits) > 1:
