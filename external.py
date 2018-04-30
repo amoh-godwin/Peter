@@ -3,7 +3,7 @@
 
 import os
 import subprocess
-
+from external_headers import PHPHeader
 class PHPRunner():
 
 
@@ -18,8 +18,11 @@ class PHPRunner():
         self.server_dir = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server/"
         self.queries = ''
         self.method = ''
+        self.post_data = ''
+        self.addition_head_str = ''
         self.redirect_status = 'true'
         self.content_type = ''
+        self.encoding = ''
         self.file_name = ''
         self.script_name = ''
         self.path_info = '/'
@@ -74,15 +77,14 @@ class PHPRunner():
         else:
 
             self.content_type = "application/x-www-form-urlencoded"
-            self.Echo()
-            self.ConLen()
+            self.echo = self.post_data
             self.post_stmt = "set \"" + self.RedStat() + "\" & set \"" + self.ReqMethod() + \
             "\" & set \"" + self.ContType() + "\" & set \"" + self.ScrFile() + \
             "\" & set \"" + self.ScrName() + "\" & set \"" + self.PathInf() + \
             "/\" & set \"" + self.SerName() + "\" & set \"" + self.Protocol() + \
             "\" & set \"" + self.ReqUri() + "\" & set \"" + self.HTTPHost() + \
-            "\" & set \"" + self.ConLen() + "\" & echo " + self.Echo() + \
-            " | php-cgi"
+            "\" & set \"" + self.ConLen() + "\" & set \"" + self.QueryStr() + \
+            "\" & echo " + self.Echo() + " | php-cgi"
             self.cmd = self.post_stmt
 
         # change the directory to the PHP dir
@@ -94,9 +96,21 @@ class PHPRunner():
         # change dir back to normal
         os.chdir(self.cwd)
 
+        # decode the outuput
+        string = str(output, self.encoding)
+
+        # split into header and body
+        string_split = string.split('\r\n\r\n')
+        headers_str = string_split[0]
+        body = string_split[1]
+
+        # send the header
+        header = PHPHeader()
+        headers_string = header.computeHeader(headers_str)
+        self.addition_head_str = headers_string
+
         # return the bin
-        print(output)
-        return('<!Doctype html><html><body>PHP-CGI.</body></html>')
+        return(bytes(body, self.encoding))
 
 
     def RedStat(self):
@@ -181,10 +195,10 @@ class PHPRunner():
 
         # convert echo to bytes
         echo_bin = bytes(self.echo, 'utf-8')
-        self._content_length = len(echo_bin) + 8  # just an over-estimate
+        self._content_length = len(echo_bin)  # just an over-estimate
 
         # make the actual string
-        string = "CONTENT_LENGTH=" + self._content_length
+        string = "CONTENT_LENGTH=" + str(self._content_length)
         return string
 
 

@@ -33,7 +33,8 @@ class Header():
         self._extMap = {'html': 'text/html', 'htm': 'text/html',
                         'php': 'text/html', 'css': 'text/css',
                         'gif': 'image/gif', 'json': 'application/json'}
-        self.functions = {'Host': self._getHost, 'Cookie': self._getCookies}
+        self.functions = {'Host': self._getHost, 'X-Powered-By': self._powered,
+                          'Cookie': self._getCookies}
         self.cookies = {}
 
     def computeResponse(self):
@@ -52,6 +53,7 @@ class Header():
         # calculation of the data the we will be sending
         Files = FileSystem()
         Files.request_method = self.request_method
+        Files.post_data = self.requested_body
         Files.search(self.requested_file)
 
         # All variables
@@ -62,6 +64,9 @@ class Header():
 
         # status code
         string += self._status(status_code)
+        
+        #*** Coming from PHP  ***#
+        string += Files.additional_head_str
 
         # the type of the content that we will be sending
         string += self._contentType()
@@ -81,7 +86,7 @@ class Header():
         string += self._contentLength(string)
 
         # this kinda ends the response header
-        string += '\n'
+        string += '\r\n'
 
         # Here is the actual response data
         string += self.data
@@ -101,13 +106,23 @@ class Header():
 
         # convert from bytes to text
         self.raw_headers = str(header, 'ascii')
-        
-        # Break into individual lines
-        lines = self.raw_headers.split('\r\n')
-        
+
+        # break
+        splited = self.raw_headers.split('\r\n\r\n')
+
         # This is the request body that came
         # if it was a post we will use it
-        self.requested_body = lines[-1]
+        if len(splited) > 1:
+            self.requested_body = splited[-1]
+        else:
+            self.requested_body = ''
+
+        # clear it to save ram
+        splited.clear()
+
+        # Break into individual lines
+        lines = self.raw_headers.split('\r\n')
+
 
         # This the request either get or post
         # It does not follow the pairing protocol of the rest
@@ -203,8 +218,8 @@ class Header():
 
 
     def _status(self, digit):
-        string = 'HTTP/1.0 '
-        string += str(digit) + " OK\n"
+        string = 'HTTP/1.1 '
+        string += str(digit) + " OK\r\n"
         return string
 
 
@@ -280,6 +295,13 @@ class Header():
                 string += "HttpOnly\r\n"
 
         return string
+
+
+    def _powered(self, statement):
+
+
+        string = 'X-Powered-By: ' + statement
+        return string + "\r\n"
 
 
     def _contentType(self):
