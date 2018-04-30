@@ -23,6 +23,7 @@ class Header():
         self.port = 0
         self.request_method = ''
         self.requested_file = ''
+        self.requested_body = ''
         self._encoding = ''
         self._extension = ''
         self._content_length = 0
@@ -103,6 +104,10 @@ class Header():
         
         # Break into individual lines
         lines = self.raw_headers.split('\r\n')
+        
+        # This is the request body that came
+        # if it was a post we will use it
+        self.requested_body = lines[-1]
 
         # This the request either get or post
         # It does not follow the pairing protocol of the rest
