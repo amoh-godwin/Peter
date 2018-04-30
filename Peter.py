@@ -22,7 +22,7 @@ class Peter(socketserver.BaseRequestHandler):
 
         """
         This is the handler,
-        
+
         handles the request and response from the server
         """
 

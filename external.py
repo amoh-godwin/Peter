@@ -13,7 +13,9 @@ class PHPRunner():
 
     def __init__(self):
         super.__self__
-        self.directory = 'C:/ProgramData/Anaconda3/'
+        self.cwd = os.getcwd()
+        self.directory = 'C:/Program Files (x86)/Deuteronomy Works/Peter/PHP/php-7.2.5'
+        self.server_dir = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server/"
         self.queries = ''
         self.method = ''
         self.redirect_status = 'true'
@@ -21,33 +23,30 @@ class PHPRunner():
         self.file_name = ''
         self.script_name = ''
         self.path_info = '/'
-        self.server_name = ''
-        self.server_protocol = ''
+        self.server_name = 'localhost:5555'
+        self.server_protocol = 'HTTP/1.1'
         self.request_uri = ''
-        self.http_host = ''
-        self.content_length = 0
+        self.http_host = 'localhost:5555'
+        self._content_length = 0
         self.echo = ''
-        self.get_stmt = "set \"" + self.RedStat() + "\" & set \"" + self.ReqMethod() + \
-        "\" & set \"" + self.ContType() + "\" & set \"" + self.ScrFile() + \
-        "\" & set \"" + self.ScrName() + "\" & set \"" + self.PathInf() + \
-        "/\" & set \"" + self.SerName() + "\" & set \"" + self.Protocol() + \
-        "\" & set \"" + self.ReqUri() + "\" & set \"" + self.HTTPHost() + \
-        "\" & set \"" + self.QueryStr + "\" & php-cgi"
-
-        self.post_stmt = "set \"" + self.RedStat() + "\" & set \"" + self.ReqMethod() + \
-        "\" & set \"" + self.ContType() + "\" & set \"" + self.ScrFile() + \
-        "\" & set \"" + self.ScrName() + "\" & set \"" + self.PathInf() + \
-        "/\" & set \"" + self.SerName() + "\" & set \"" + self.Protocol() + \
-        "\" & set \"" + self.ReqUri() + "\" & set \"" + self.HTTPHost() + \
-        "\" & set \"" + self.ConLen() + "\" & echo " + self.Echo() + \
-        " | php-cgi"
+        self.get_stmt = ""
+        self.post_stmt = ""
+        self.cmd = ""
 
 
     def Start(self, file, queries, method ):
 
 
+        # The variables
+        self.file_name = file
+        self.script_name = file
+        self.method = method
+        self.queries = queries
+        self.request_uri = file
+
+
         # The functions
-        self.RedStat()
+        """self.RedStat()
         self.ReqMethod()
         self.ContType()
         self.ScrFile()
@@ -56,38 +55,52 @@ class PHPRunner():
         self.SerName()
         self.Protocol()
         self.ReqUri()
-        self.HTTPHost()
-        self.QueryStr()
-        self.ConLen()
-        self.Echo()
+        self.HTTPHost()"""
 
         # run function that make sense only to these methods
         if method == "GET":
 
+
             self.content_type = 'text/html'
-            self.QueryStr()
+            #self.QueryStr()
+            self.get_stmt = "set \"" + self.RedStat() + "\" & set \"" + self.ReqMethod() + \
+            "\" & set \"" + self.ContType() + "\" & set \"" + self.ScrFile() + \
+            "\" & set \"" + self.ScrName() + "\" & set \"" + self.PathInf() + \
+            "/\" & set \"" + self.SerName() + "\" & set \"" + self.Protocol() + \
+            "\" & set \"" + self.ReqUri() + "\" & set \"" + self.HTTPHost() + \
+            "\" & set \"" + self.QueryStr() + "\" & php-cgi"
+            self.cmd = self.get_stmt
 
         else:
 
             self.content_type = "application/x-www-form-urlencoded"
             self.Echo()
             self.ConLen()
+            self.post_stmt = "set \"" + self.RedStat() + "\" & set \"" + self.ReqMethod() + \
+            "\" & set \"" + self.ContType() + "\" & set \"" + self.ScrFile() + \
+            "\" & set \"" + self.ScrName() + "\" & set \"" + self.PathInf() + \
+            "/\" & set \"" + self.SerName() + "\" & set \"" + self.Protocol() + \
+            "\" & set \"" + self.ReqUri() + "\" & set \"" + self.HTTPHost() + \
+            "\" & set \"" + self.ConLen() + "\" & echo " + self.Echo() + \
+            " | php-cgi"
+            self.cmd = self.post_stmt
 
-        # change the directory and file to be safe in testing mode
+        # change the directory to the PHP dir
         os.chdir(self.directory)
-        file = 'C:\\index.py'
-
-        # the command
-        cmd = "python " + file + " " + queries
 
         # run the subprocess
-        output = subprocess.check_output(cmd, shell=True)
+        output = subprocess.check_output(self.cmd, shell=True)
+
+        # change dir back to normal
+        os.chdir(self.cwd)
 
         # return the bin
-        return output
+        print(output)
+        return('<!Doctype html><html><body>PHP-CGI.</body></html>')
 
 
     def RedStat(self):
+
 
         # make string
         string = "REDIRECT_STATUS=" + self.redirect_status
@@ -96,11 +109,13 @@ class PHPRunner():
 
     def ReqMethod(self):
 
+
         string = "REQUEST_METHOD=" + self.method
         return string
 
 
     def ContType(self):
+
 
         string = "CONTENT_TYPE=" + self.content_type
         return string
@@ -108,11 +123,13 @@ class PHPRunner():
 
     def ScrFile(self):
 
+
         string = "SCRIPT_FILENAME=" + self.file_name
         return string
 
 
     def ScrName(self):
+
 
         string = "SCRIPT_NAME=" + self.script_name
         return string
@@ -120,11 +137,13 @@ class PHPRunner():
 
     def PathInf(self):
 
+
         string = "PATHINFO=" + self.path_info
         return string
 
 
     def SerName(self):
+
 
         string = "SERVER_NAME=" + self.server_name
         return string
@@ -132,11 +151,13 @@ class PHPRunner():
 
     def Protocol(self):
 
+
         string = "SERVER_PROTOCOL=" + self.server_protocol
         return string
 
 
     def ReqUri(self):
+
 
         string = "REQUEST_URI=" + self.request_uri
         return string
@@ -144,21 +165,35 @@ class PHPRunner():
 
     def HTTPHost(self):
 
+
         string = "HTTPHOST=" + self.http_host
         return string
 
 
-    def QueryStr():
+    def QueryStr(self):
 
-        string = ""
+
+        string = "QUERY_STRING=" + self.queries
         return string
 
 
     def ConLen(self):
 
-        string = "CONTENT_LENGTH=" + self.content_length
+        # convert echo to bytes
+        echo_bin = bytes(self.echo, 'utf-8')
+        self._content_length = len(echo_bin) + 8  # just an over-estimate
+
+        # make the actual string
+        string = "CONTENT_LENGTH=" + self._content_length
         return string
 
 
     def Echo(self):
-        pass
+
+
+        # replace the ampersand(&) with ^^^&
+        new_text = self.echo.replace('&', '^^^&')
+
+        # build the string
+        string = new_text
+        return string

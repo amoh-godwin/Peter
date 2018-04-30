@@ -2,7 +2,7 @@
 # To You Alone Oh Father, I commit myself
 import os
 import chardet
-from external import directory, run
+from external import PHPRunner
 
 class FileSystem():
 
@@ -228,14 +228,15 @@ class FileSystem():
 
     def _data(self, file):
 
+
         # check the file extension for php
         if self._file_extension == 'php':
 
             # setting the directory to directory
-            directory
+            phpRunner = PHPRunner()
 
             # run with php and with the query
-            read = run(file, self.query_string, self.request_method)
+            read = phpRunner.Start(file, self.query_string, self.request_method)
 
             # set length of the content
             self.contentlength = len(read)
