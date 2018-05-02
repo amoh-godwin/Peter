@@ -3,6 +3,7 @@
 import os
 import chardet
 from external import PHPRunner
+from css_fs import CssRunner
 
 class FileSystem():
 
@@ -107,7 +108,6 @@ class FileSystem():
                     return self.status_code
 
             # status code found
-            self.status_code = 302
             return self.status_code
 
         except:
@@ -118,6 +118,8 @@ class FileSystem():
 
 
     def _crawl(self, path, needle):
+
+
         folders = os.listdir(path)
         if needle in folders:
 
@@ -135,9 +137,9 @@ class FileSystem():
                 # return, it is a file
                 # data will be ready in self.data
                 self._data(item)
-            
+
         else:
-            
+
             # we couldn't find it means we have ended
             self.status_code = 404
             return
@@ -213,7 +215,7 @@ class FileSystem():
 
                 # returnt the 403 document instead
                 self._data(self.SCRIPTS_LOCATION + '/403.html')
-                
+
             else:
 
                 # sure we're going to list
@@ -222,7 +224,7 @@ class FileSystem():
         else:
 
             # file extension sure contains gibberish
-            #self._file_extension = 'php'
+            #self._file_extension = 'php' 
 
             # htacces or just go ahead to list dir
             self._data(self.SCRIPTS_LOCATION + '/dir.html' )
@@ -246,12 +248,23 @@ class FileSystem():
             # set length of the content
             self.contentlength = len(read)
 
+
+        elif self._file_extension == 'css':
+
+            # The file is a css file
+            Css = CssRunner()
+            read = Css.Read(file)
+            self.contentLength = len(read)
+            self.data = read
+            return
+
+
         else:
 
             # file is not php
             with open(file, 'rb') as bbin:
                 read = bbin.read()
-    
+
                 # set length of the content
                 self.contentlength = len(read)
 

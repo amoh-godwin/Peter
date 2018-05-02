@@ -26,6 +26,7 @@ class Header():
         self.requested_body = ''
         self._encoding = ''
         self._extension = ''
+        self.Files = FileSystem()
         self._content_length = 0
         self.raw_headers = ""
         self.headerPair = {}
@@ -51,22 +52,27 @@ class Header():
         # 'user-1': {"user-1": "Jesus", "path": "/path/about/", "expires": "Fri, 25-May-2018 09:46:00 GMT"}}
 
         # calculation of the data the we will be sending
-        Files = FileSystem()
-        Files.request_method = self.request_method
-        Files.post_data = self.requested_body
-        Files.search(self.requested_file)
+        self.Files = FileSystem()
+        self.Files.request_method = self.request_method
+        self.Files.post_data = self.requested_body
+        self.Files.search(self.requested_file)
 
         # All variables
-        self.data = Files.data
-        self._encoding = Files.encoding
-        self._extension = Files._file_extension
-        status_code = Files.status_code
+        self.data = self.Files.data
+        self._encoding = self.Files.encoding
+        self._extension = self.Files._file_extension
+        status_code = self.Files.status_code
 
         # status code
         string += self._status(status_code)
         
         #*** Coming from PHP  ***#
-        string += Files.additional_head_str
+        string += self.Files.additional_head_str
+        
+        ## Quick ADD of Headers
+        # To-do
+        string += 'Accept-Ranges: bytes\r\n'
+        string += 'Connection: Keep-Alive\r\n'
 
         # the type of the content that we will be sending
         string += self._contentType()
@@ -89,10 +95,16 @@ class Header():
         string += '\r\n'
 
         # Here is the actual response data
-        string += self.data
+        if self._extension == 'css':
+            total = bytes(string, 'ascii') + self.data
+            print(total)
+            return total
 
-        # encode everything and send it to the browser
-        return bytes(string, 'utf-8')
+        else:
+            string += self.data
+    
+            # encode everything and send it to the browser
+            return bytes(string, self._encoding)
 
 
     def getRequest(self, header):
@@ -239,10 +251,16 @@ class Header():
         blen = len(bbin)
 
         # convert main data to bytes
-        bdata = bytes(self.data, self._encoding)
+        if self._extension == 'css':
 
-        # len of data from outside
-        bdatalen = len(bdata)
+            bdatalen = self.Files.contentLength
+
+        else:
+
+            bdata = bytes(self.data, self._encoding)
+    
+            # len of data from outside
+            bdatalen = len(bdata)
 
         # what we have for now
         content_length = blen + bdatalen
@@ -324,8 +342,14 @@ class Header():
         if self._extension in self._extMap:
 
             # add the corresponding format to the string
-            string += self._extMap[self._extension] + '; '
+            string += self._extMap[self._extension]
 
-        string += 'charset='+encoding
+        # if its a css file
+        if self._extension == 'css':
+            pass
+        else:
+
+            # it is not a css file
+            string += '; charset='+encoding
 
         return string + "\r\n"
