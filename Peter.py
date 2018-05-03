@@ -4,7 +4,7 @@ Created on Sun Apr 22 15:52:27 2018
 @author: Amoh - Gyebi Godwin
 # To You oh, LORD i commit myself
 """
-
+import threading
 import socketserver
 
 import sys
@@ -30,6 +30,9 @@ class Peter(socketserver.BaseRequestHandler):
         # self.request is the request from the client
         self.data = self.request.recv(1024).strip()
 
+        current_thread = threading.current_thread()
+        print(current_thread.name)
+
         # This would be used for logging
         print("{} wrote:".format(self.client_address[0]))
 
@@ -51,6 +54,10 @@ class Peter(socketserver.BaseRequestHandler):
         self.request.sendall(resp)
 
 
+class ThreadTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    pass
+
+
 if __name__ == "__main__":
 
     # if user passed in any other value
@@ -59,7 +66,7 @@ if __name__ == "__main__":
 
         # set as the new port
         port = sys.argv[1]
-        
+
     else:
 
         # set it to the native that we are using
@@ -68,7 +75,7 @@ if __name__ == "__main__":
     HOST, PORT = "localhost", port
 
     # Create the server, binding to localhost on port 9999
-    with socketserver.TCPServer((HOST, PORT), Peter) as server:
+    with ThreadTCP((HOST, PORT), Peter) as server:
         # Activate the server; this will keep running until you
         # interrupt the program with Ctrl-C
         server.serve_forever()
