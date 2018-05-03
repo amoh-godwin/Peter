@@ -33,7 +33,8 @@ class Header():
         self.data = ''
         self._extMap = {'html': 'text/html', 'htm': 'text/html',
                         'php': 'text/html', 'css': 'text/css',
-                        'gif': 'image/gif', 'json': 'application/json'}
+                        'js': 'text/javascript', 'json': 'application/json',
+                        'gif': 'image/gif'}
         self.functions = {'Host': self._getHost, 'X-Powered-By': self._powered,
                           'Cookie': self._getCookies}
         self.cookies = {}
