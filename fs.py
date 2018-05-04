@@ -275,6 +275,13 @@ class FileSystem():
         if detection['confidence'] > 0.99:
             self.encoding = detection['encoding']
 
+        # if detection in none
+        elif detection['confidence'] < 0.1:
+            self.data = read
+            self.contentLength = len(read)
+    
+            # it should return, nothing else to do
+            return
         else:
             self.encoding = 'ascii'
 

@@ -102,6 +102,11 @@ class Header():
             print(total)
             return total
 
+        # if its an image
+        elif self._extMap[self._extension].find('image/') > -1:
+            total = bytes(string, 'ascii') + self.data
+            return total
+
         else:
             string += self.data
     
@@ -257,6 +262,10 @@ class Header():
 
             bdatalen = self.Files.contentLength
 
+        #if its an image
+        elif self._extMap[self._extension].find('image/') > -1:
+            bdatalen = self.Files.contentLength
+
         else:
 
             bdata = bytes(self.data, self._encoding)
@@ -349,6 +358,11 @@ class Header():
         # if its a css file
         if self._extension == 'css':
             pass
+
+        # if it is an image
+        elif self._extMap[self._extension].find('image/') > -1:
+            pass
+
         else:
 
             # it is not a css file
