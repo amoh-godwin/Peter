@@ -3,6 +3,7 @@
 
 import os
 import subprocess
+import base64
 from external_headers import PHPHeader
 class PHPRunner():
 
@@ -19,7 +20,7 @@ class PHPRunner():
         self.queries = ''
         self.method = ''
         self.post_data = ''
-        self.addition_head_str = ''
+        self.addition_head_str = {}
         self.redirect_status = 'true'
         self.content_type = ''
         self.encoding = ''
@@ -46,6 +47,9 @@ class PHPRunner():
         self.method = method
         self.queries = queries
         self.request_uri = file
+
+        # this will indicate whether we are working with raw data or not
+        raw_data = False
 
 
         # The functions
@@ -97,20 +101,48 @@ class PHPRunner():
         os.chdir(self.cwd)
 
         # decode the outuput
-        string = str(output, self.encoding)
+        try:
+            string = str(output, self.encoding)
 
-        # split into header and body
-        string_split = string.split('\r\n\r\n')
+            # split into header and body
+            string_split = string.split('\r\n\r\n')
+            body = string_split[1]
+
+        except:
+
+            # convert to string
+            string = str(output)
+
+            # find byte postion where break happens
+            # Add four bytes since the last positon is +3, plus the jump
+            start = output.find(b'\r\n\r\n') + 4
+
+            # get those bytes only
+            body = output[start:]
+
+            # set raw data
+            raw_data = True
+
+            # remove extraneous byte data
+            new_string = string[2:-1]
+
+            # split now and get the header
+            string_split = new_string.split('\\r\\n\\r\\n')
+
+        # get the header
         headers_str = string_split[0]
-        body = string_split[1]
+
 
         # send the header
         header = PHPHeader()
-        headers_string = header.computeHeader(headers_str)
-        self.addition_head_str = headers_string
+        headers_ext = header.computeHeader(headers_str)
+        self.addition_head_str = headers_ext
 
         # return the bin
-        return(bytes(body, self.encoding))
+        if raw_data:
+            return body
+        else:
+            return(bytes(body, self.encoding))
 
 
     def RedStat(self):

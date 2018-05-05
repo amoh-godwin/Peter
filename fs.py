@@ -24,7 +24,7 @@ class FileSystem():
         self.request_method = ''
         self.Default_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server"
         self.status_code = 200
-        self.additional_head_str = ''
+        self.additional_head_str = {}
         self._actual_file = ''
         self.query_string = ''
         self.post_data = ''
@@ -246,7 +246,10 @@ class FileSystem():
             self.additional_head_str = phpRunner.addition_head_str
 
             # set length of the content
-            self.contentlength = len(read)
+            self.contentLength = len(read)
+            self.encoding = phpRunner.encoding
+            self.data = read
+            return
 
 
         elif self._file_extension == 'css':

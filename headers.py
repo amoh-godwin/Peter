@@ -18,7 +18,6 @@ class Header():
 
     def __init__(self):
         super.__self__
-        self.server_name = "Server: Peter (Py/3.6.1)"
         self.host = ''
         self.port = 0
         self.request_method = ''
@@ -30,6 +29,8 @@ class Header():
         self._content_length = 0
         self.raw_headers = ""
         self.headerPair = {}
+        self.send_headers = {'Connection': 'Keep-Alive', 'Accept-Ranges': 'bytes',
+                             'Server': 'Peter (Py/3.6.1)', 'Content-type': 'text/html'}
         self.data = ''
         self._extMap = {'html': 'text/html', 'htm': 'text/html',
                         'php': 'text/html', 'css': 'text/css',
@@ -67,13 +68,21 @@ class Header():
 
         # status code
         string += self._status(status_code)
-        
+
         #*** Coming from PHP  ***#
-        string += self.Files.additional_head_str
+        self.send_headers.update(self.Files.additional_head_str)
+
+        # Header calculator
+        for header in self.send_headers:
+            string += header
+            string += ': '
+            string += self.send_headers[header]
+            string += '\r\n'
+
         
         ## Quick ADD of Headers
         # To-do
-        string += 'Accept-Ranges: bytes\r\n'
+        """string += 'Accept-Ranges: bytes\r\n'
         string += 'Connection: Keep-Alive\r\n'
 
         # the type of the content that we will be sending
@@ -85,7 +94,7 @@ class Header():
         # the cookies that we will be sending
         # will return empty is no cookies are requested
         #cookies_str = self._cookie(cookies)
-        string += self._cookie()
+        string += self._cookie()"""
 
         # the actual date this whole event was completed
         string += self._date()
@@ -95,9 +104,20 @@ class Header():
 
         # this kinda ends the response header
         string += '\r\n'
+        
+        
+        # ----
+        if self.send_headers['Content-type'] == 'text/html':
+            string += self.data
+
+            return bytes(string, self._encoding)
+        
+        else:
+            total = bytes(string + '\r\n', 'ascii') + self.data
+            return total
 
         # Here is the actual response data
-        if self._extension == 'css':
+        """if self._extension == 'css':
             total = bytes(string, 'ascii') + self.data
             print(total)
             return total
@@ -111,7 +131,7 @@ class Header():
             string += self.data
     
             # encode everything and send it to the browser
-            return bytes(string, self._encoding)
+            return bytes(string, self._encoding)"""
 
 
     def getRequest(self, header):
@@ -258,20 +278,17 @@ class Header():
         blen = len(bbin)
 
         # convert main data to bytes
-        if self._extension == 'css':
-
-            bdatalen = self.Files.contentLength
-
-        #if its an image
-        elif self._extMap[self._extension].find('image/') > -1:
-            bdatalen = self.Files.contentLength
-
-        else:
+        if self._extension == 'html' or self._extension == 'htm':
 
             bdata = bytes(self.data, self._encoding)
     
             # len of data from outside
             bdatalen = len(bdata)
+            
+
+        else:
+
+            bdatalen = self.Files.contentLength
 
         # what we have for now
         content_length = blen + bdatalen
@@ -295,8 +312,11 @@ class Header():
         # and the last \n that before actual data and EOF which is \r\n
         self._content_length = content_length + lencont + 5
 
-        # Now we are just continues with the content length string
-        string += str(self._content_length) + '\r\n'
+        # Now we are just continuing with the content length string
+        if 'Content-Disposition' in  self.send_headers:
+            string = ''
+        else:
+            string += str(self._content_length) + '\r\n'
         return string
 
 
@@ -336,8 +356,6 @@ class Header():
     def _contentType(self):
 
 
-        string = 'Content-Type: '
-
         # if the encoding detected was ascii use utf-8 instead
         if self._encoding == 'ascii':
             
@@ -353,7 +371,7 @@ class Header():
         if self._extension in self._extMap:
 
             # add the corresponding format to the string
-            string += self._extMap[self._extension]
+            self.send_headers['Content-type'] = self._extMap[self._extension]
 
         # if its a css file
         if self._extension == 'css':
@@ -366,6 +384,6 @@ class Header():
         else:
 
             # it is not a css file
-            string += '; charset='+encoding
+            self.send_headers['Content-type'] += '; charset='+encoding
 
-        return string + "\r\n"
+        return# string + "\r\n"
