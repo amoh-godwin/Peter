@@ -15,7 +15,7 @@ class Peter(socketserver.BaseRequestHandler):
     """
     The Peter Server Implementation
     
-    Source copied from python documentation
+    Basic source copied from python documentation
     """
 
     def handle(self):
