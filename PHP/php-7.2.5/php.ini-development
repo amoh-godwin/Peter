@@ -894,12 +894,12 @@ default_socket_timeout = 60
 ;extension=ldap
 ;extension=mbstring
 ;extension=exif      ; Must be after mbstring as it depends on it
-extension=mysqli
+;extension=mysqli
 ;extension=oci8_12c  ; Use with Oracle Database 12c Instant Client
 ;extension=odbc
 ;extension=openssl
 ;extension=pdo_firebird
-extension=pdo_mysql
+;extension=pdo_mysql
 ;extension=pdo_oci
 ;extension=pdo_odbc
 ;extension=pdo_pgsql
@@ -1010,7 +1010,7 @@ pdo_mysql.cache_size = 2000
 ; Default socket name for local MySQL connects.  If empty, uses the built-in
 ; MySQL defaults.
 ; http://php.net/pdo_mysql.default-socket
-pdo_mysql.default_socket= ""
+pdo_mysql.default_socket=
 
 [Phar]
 ; http://php.net/phar.readonly
@@ -1156,7 +1156,7 @@ mysqli.default_port = 3306
 ; Default socket name for local MySQL connects.  If empty, uses the built-in
 ; MySQL defaults.
 ; http://php.net/mysqli.default-socket
-mysqli.default_socket = ""
+mysqli.default_socket =
 
 ; Default host for mysql_connect() (doesn't apply in safe mode).
 ; http://php.net/mysqli.default-host
@@ -1878,6 +1878,10 @@ ldap.max_links = -1
 
 ; Prevent name collisions in chroot'ed environment.
 ;opcache.validate_root=0
+
+; If specified, it produces opcode dumps for debugging different stages of
+; optimizations.
+;opcache.opt_debug_level=0
 
 [curl]
 ; A default value for the CURLOPT_CAINFO option. This is required to be an
