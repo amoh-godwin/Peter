@@ -15,6 +15,10 @@
 
 # bins
 mysql/
+<<<<<<< HEAD
+=======
+php/php-7.2.5
+>>>>>>> 3961f2e18c39717f8fa0c366bb57a6354786880f
 
 # Qt-es
 object_script.*.Release
