@@ -12,11 +12,14 @@ import sys
 from headers import Header
 
 class Peter(socketserver.BaseRequestHandler):
+
     """
     The Peter Server Implementation
-    
-    Basic source copied from python documentation
+
+
+
     """
+
 
     def handle(self):
 
@@ -71,11 +74,14 @@ if __name__ == "__main__":
 
         # set it to the native that we are using
         port = 5555
-    
+
     HOST, PORT = "localhost", port
 
-    # Create the server, binding to localhost on port 9999
     with ThreadTCP((HOST, PORT), Peter) as server:
-        # Activate the server; this will keep running until you
         # interrupt the program with Ctrl-C
+        
+        print('Server Started at port:', str(port))
+        print('**********************************')
+        print('\n\n\n')
+        
         server.serve_forever()
