@@ -15,8 +15,6 @@
 
 # bins
 mysql/
-php/php-7.2.5
-/PHP/php-7.2.5
 
 # Qt-es
 object_script.*.Release
