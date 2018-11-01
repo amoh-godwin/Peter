@@ -14,8 +14,8 @@ class PHPRunner():
     def __init__(self):
         super.__self__
         self.cwd = os.getcwd()
-        self.directory = "C:/Program Files (x86)/Deuteronomy Works/Peter/PHP/php-7.2.5"
-        self.server_dir = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server/"
+        self.directory = "C:/Deuteronomy Works/Peter/PHP/php-7.2.5"
+        self.server_dir = "C:/Deuteronomy Works/Peter/Server/"
         self.queries = ''
         self.method = ''
         self.post_data = ''

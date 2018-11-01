@@ -22,7 +22,7 @@ class FileSystem():
 
         super.__self__
         self.request_method = ''
-        self.Default_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/Server"
+        self.Default_LOCATION = "C:/Deuteronomy Works/Peter/Server"
         self.status_code = 200
         self.additional_head_str = {}
         self._actual_file = ''
@@ -31,7 +31,7 @@ class FileSystem():
         self._no = 0
         self._steps = []
         self._depth = 0
-        self.SCRIPTS_LOCATION = "C:/Program Files (x86)/Deuteronomy Works/Peter/_scripts"
+        self.SCRIPTS_LOCATION = "C:/Deuteronomy Works/Peter/_scripts"
         self._file_extension = 'html'
         self.data = ''
         self.encoding = 'ascii'
