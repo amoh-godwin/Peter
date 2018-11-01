@@ -42,6 +42,8 @@ class Peter(socketserver.BaseRequestHandler):
         # The data that the browser came with
         # basically the request handler
         print(self.data)
+        
+        print('\n\n')
 
         # Initialise the header class
         peter = Header()
