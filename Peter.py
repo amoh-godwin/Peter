@@ -34,10 +34,10 @@ class Peter(socketserver.BaseRequestHandler):
         self.data = self.request.recv(1024).strip()
 
         current_thread = threading.current_thread()
-        print(current_thread.name)
+        #print(current_thread.name)
 
         # This would be used for logging
-        print("{} wrote:".format(self.client_address[0]))
+        print("{} requested".format(self.client_address[0]))
 
         # The data that the browser came with
         # basically the request handler
