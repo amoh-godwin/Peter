@@ -80,7 +80,8 @@ if __name__ == "__main__":
     with ThreadTCP((HOST, PORT), Peter) as server:
         # interrupt the program with Ctrl-C
         
-        print('Server Started at port:', str(port))
+        print('\n\n')
+        print('Server Started at PORT:', str(port))
         print('**********************************')
         print('\n\n\n')
         
