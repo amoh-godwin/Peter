@@ -108,7 +108,7 @@ class Header():
         
         # ----
         if self.send_headers['Content-type'] == 'text/html':
-            string += self.data
+            string += str(self.data)
 
             return bytes(string, self._encoding)
         
