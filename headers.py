@@ -64,6 +64,9 @@ class Header():
         self.data = self.Files.data
         self._encoding = self.Files.encoding
         self._extension = self.Files._file_extension
+        if self._extension == 'css':
+            self.send_headers['Content-type'] = 'text/css'
+            self.send_headers.pop('Accept-Ranges')
         status_code = self.Files.status_code
 
         # status code
@@ -109,9 +112,12 @@ class Header():
         # ----
         if self.send_headers['Content-type'] == 'text/html':
             string += str(self.data)
-
             return bytes(string, self._encoding)
-        
+
+        elif self.send_headers['Content-type'] == 'text/css':
+            string += str(self.data)
+            return bytes(string, self._encoding)
+
         else:
             total = bytes(string + '\r\n', 'ascii') + self.data
             return total
