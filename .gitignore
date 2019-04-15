@@ -13,13 +13,6 @@
 /__pycache__
 /*/__pycache__
 
-# bins
-mysql/
-<<<<<<< HEAD
-=======
-php/php-7.2.5
->>>>>>> 3961f2e18c39717f8fa0c366bb57a6354786880f
-
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
@@ -39,7 +32,7 @@ ui_*.h
 *.jsc
 Makefile*
 *build-*
-
+m
 # Qt unit tests
 target_wrapper.*
 
@@ -52,3 +45,8 @@ target_wrapper.*
 
 # QtCreator CMake
 CMakeLists.txt.user*
+
+# Dist
+dist/*
+/mysql
+PHP/*
