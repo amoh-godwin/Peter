@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls.Universal 2.12
+import QtQuick 2.10
+import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Universal 2.3
 import "components"
 
 ApplicationWindow {
@@ -10,25 +10,49 @@ ApplicationWindow {
     height: 500
     title: qsTr("Welcome")
 
-    property var serversData: [
-                               {'index':0, 'name': 'MySql Database', 'status': 'Running'},
-                               {'index': 1, 'name': 'Peter Web Server', 'status': 'Running'}
-                              ]
+    property var serversData: []
     property QtObject llView
+
+    signal openApp()
+    signal openAppFolder()
+    signal openPhpMyAdmin()
+    signal openSupport()
 
     signal stopServer(int ind)
     signal startServer(int ind)
+    signal logServerEvent(int ind, string Message)
+
+    Component.onCompleted: {
+        Switcher.getStatus()
+    }
+
+    onOpenApp: {
+        //
+    }
+
+    onOpenAppFolder: {
+        //
+    }
+
+    onOpenPhpMyAdmin: {
+        //
+    }
+
+    onOpenSupport: {
+        //
+    }
+
 
     onStopServer: {
-        console.log('stopping')
-        //func.stop_server(ind)
-        llView.model.get(ind).status = 'Stopped'
+        Switcher.stopServer(ind)
     }
 
     onStartServer: {
-        console.log('starting')
-        //func.start_server(ind)
-        llView.model.get(ind).status = 'Running'
+        Switcher.startServer(ind)
+    }
+
+    onLogServerEvent: {
+        llView.model.get(ind).status = Message
     }
 
 
@@ -58,5 +82,21 @@ ApplicationWindow {
 
     }
 
+
+    Connections {
+        target: Switcher
+
+        onLog: {
+            var ret = logger
+            logServerEvent(ret[0], ret[1])
+        }
+
+        onSendStatusInfo: {
+            var ret = sendStatus
+            serversData = ret
+        }
+
+
+    }
 
 }
