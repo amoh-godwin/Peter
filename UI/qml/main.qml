@@ -27,19 +27,19 @@ ApplicationWindow {
     }
 
     onOpenApp: {
-        //
+        General.openApp()
     }
 
     onOpenAppFolder: {
-        //
+        General.openAppFolder()
     }
 
     onOpenPhpMyAdmin: {
-        //
+        General.openPhpMyAdmin()
     }
 
     onOpenSupport: {
-        //
+        General.openSupport()
     }
 
 
@@ -82,6 +82,9 @@ ApplicationWindow {
 
     }
 
+    Connections {
+        target: General
+    }
 
     Connections {
         target: Switcher

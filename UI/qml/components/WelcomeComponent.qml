@@ -18,21 +18,25 @@ Component {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Go to Application")
+                onClicked: openApp()
             }
 
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Open PhpMyAdmin")
+                onClicked: openPhpMyAdmin()
             }
 
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Open Application Folder")
+                onClicked: openAppFolder()
             }
 
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Get Support")
+                onClicked: openSupport()
             }
 
         }
