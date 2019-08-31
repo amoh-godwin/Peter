@@ -10,6 +10,10 @@ from PyQt5.QtGui import QGuiApplication, QIcon
 from PyQt5.QtQml import QQmlApplicationEngine
 from func import Switcher
 
+
+def cleanUp():
+    switcher.save_file()
+
 os.environ["QT_QUICK_CONTROLS_STYLE"] = "Universal"
 # QResource.registerResource("")
 app = QGuiApplication(sys.argv)
@@ -20,4 +24,6 @@ engine = QQmlApplicationEngine()
 engine.rootContext().setContextProperty("Switcher", switcher)
 engine.load("UI/qml/main.qml")
 engine.quit.connect(app.quit)
+app.aboutToQuit.connect(cleanUp)
 sys.exit(app.exec_())
+ 
