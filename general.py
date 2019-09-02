@@ -6,7 +6,7 @@ Created on Sat Aug 31 21:17:28 2019
 """
 import threading
 import subprocess
-from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSlot
 
 class GeneralFunc(QObject):
 
