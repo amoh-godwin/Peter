@@ -32,8 +32,7 @@ class Switcher(QObject):
         file_path = self.parent_folder + self.status_file
 
         with open(file_path, mode="rb") as sets_file:
-            decoded = base64.b64decode(sets_file.read())
-            data = str(decoded, 'ascii').replace("'", '"')
+            data = self._decrypt(sets_file.read())
             info = json.loads(data)
 
         self.server = info
@@ -77,6 +76,13 @@ class Switcher(QObject):
         file_path = self.parent_folder + self.status_file
 
         with open(file_path, mode="wb") as sets_file:
-            encoded_data = base64.b64encode(bytes(str(self.server), 'ascii'))
+            encoded_data = self._encrypt(self.server)
             sets_file.write(encoded_data)
 
+    def _encrypt(self, data):
+        return base64.b64encode(bytes(str(data), 'ascii'))
+
+    def _decrypt(self, data):
+        decoded_data = base64.b64decode(data)
+        str_data =  str(decoded_data, 'ascii')
+        return str_data.replace("'", '"')
