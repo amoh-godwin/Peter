@@ -1,5 +1,6 @@
 import threading
 import json
+import os
 import subprocess
 import base64
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
@@ -11,11 +12,11 @@ class Switcher(QObject):
 
     def __init__(self):
         QObject.__init__(self)
-        self.parent_folder = "C:/Deuteronomy Works/Peter/settings"
+        self.parent_folder = "C:/Deuteronomy Works/Peter/" # use for test only
         self.status_file = \
-        "/3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
-        self.server = [{"index": 0, "name": "Peter Web Server", "status": "Stopped"},
-                       {"index": 1, "name": "MySQL Database", "status": "Stopped"}]
+        "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
+        self.settings = []
+        self.server = []
 
     log = pyqtSignal(list, arguments=['logger'])
     sendStatusInfo = pyqtSignal(list, arguments=['sendStatus'])
@@ -29,15 +30,16 @@ class Switcher(QObject):
 
     def sendStatus(self):
 
-        file_path = self.parent_folder + self.status_file
+        file_path = self.parent_folder + self.status_file # self.status_file
 
         with open(file_path, mode="rb") as sets_file:
             data = self._decrypt(sets_file.read())
-            info = json.loads(data)
+            self.settings = json.loads(data)
 
-        self.server = info
-        stats = self.server
-        self.sendStatusInfo.emit(stats)
+        self.parent_folder = self.settings[0]["parent_folder"]
+        self.settings_file = self.settings[0]["settings_file"]
+        self.server = self.settings[1]
+        self.sendStatusInfo.emit(self.server)
 
     @pyqtSlot(int)
     def startServer(self, index):
@@ -73,10 +75,12 @@ class Switcher(QObject):
         self.log.emit([index, message])
 
     def save_file(self):
-        file_path = self.parent_folder + self.status_file
+        file_path = os.path.join(self.parent_folder, self.settings_file)
+        
+        self.settings[1] = self.server
 
         with open(file_path, mode="wb") as sets_file:
-            encoded_data = self._encrypt(self.server)
+            encoded_data = self._encrypt(self.settings)
             sets_file.write(encoded_data)
 
     def _encrypt(self, data):
