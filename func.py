@@ -12,7 +12,6 @@ class Switcher(QObject):
 
     def __init__(self):
         QObject.__init__(self)
-        self.parent_folder = "C:/Deuteronomy Works/Peter/" # dev mode only
         self.status_file = \
         "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
         self.settings = []
@@ -33,13 +32,12 @@ class Switcher(QObject):
 
     def sendStatus(self):
 
-        file_path = self.parent_folder + self.status_file # self.status_file
+        file_path = self.status_file
 
         with open(file_path, mode="rb") as sets_file:
             data = self._decrypt(sets_file.read())
             self.settings = json.loads(data)
 
-        self.parent_folder = self.settings[0]["parent_folder"]
         self.settings_file = self.settings[0]["settings_file"]
         self.server = self.settings[1]
         print(self.server)
@@ -110,7 +108,7 @@ class Switcher(QObject):
         self.log.emit([index, message])
 
     def save_file(self):
-        file_path = os.path.join(self.parent_folder, self.settings_file)
+        file_path = self.settings_file
 
         self.settings[1] = self.server
 
