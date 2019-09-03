@@ -12,11 +12,14 @@ class Switcher(QObject):
 
     def __init__(self):
         QObject.__init__(self)
-        self.parent_folder = "C:/Deuteronomy Works/Peter/" # use for test only
+        self.parent_folder = "C:/Deuteronomy Works/Peter/" # dev mode only
         self.status_file = \
         "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
         self.settings = []
         self.server = []
+        self.port = 0
+        self.web_sProc = 0
+        self.mysql_sProc = 0
 
     log = pyqtSignal(list, arguments=['logger'])
     sendStatusInfo = pyqtSignal(list, arguments=['sendStatus'])
@@ -39,6 +42,8 @@ class Switcher(QObject):
         self.parent_folder = self.settings[0]["parent_folder"]
         self.settings_file = self.settings[0]["settings_file"]
         self.server = self.settings[1]
+        print(self.server)
+        self.port = self.server[0]["port"]
         self.sendStatusInfo.emit(self.server)
 
     @pyqtSlot(int)
@@ -57,15 +62,45 @@ class Switcher(QObject):
 
     def _startServer(self, index):
 
-        # self._startService(index)
+        if index == 0:
+            self._startWebServer()
+        else:
+            self._startMySQL()
         self._updateStatus(index, 'Running')
         self.logger(index, 'Running')
 
     def _stopServer(self, index):
 
-        # self._stopService(index)
+        if index == 0:
+            self._stopWebServer()
+        else:
+            self._stopMySQL()
         self._updateStatus(index, 'Stopped')
         self.logger(index, 'Stopped')
+
+    def _startWebServer(self):
+        # cmd = self.server[0]["path"] + " " + str(self.port)
+        #print(cmd)
+        self.web_sProc = subprocess.Popen([self.server[0]["path"],
+                                           str(self.port)],
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.STDOUT,
+                                           shell=False)
+        return True
+
+    def _stopWebServer(self):
+        self.web_sProc.kill()
+        self.web_sProc = None
+        return True
+
+    def _startMySQL(self):
+        cmd = self.server[1]["path"] + "mysqld"
+        self.mysql_sProc = subprocess.check_output([cmd])
+
+    def _stopMySQL(self):
+        cmd = self.server[1].path +  "mysqladmin" + \
+        " -u root -p " + self.passcode + " shutdown"
+        out = subprocess.check_output([cmd])
 
     def _updateStatus(self, index, new_sts):
         self.server[index]['status'] = new_sts
@@ -76,7 +111,7 @@ class Switcher(QObject):
 
     def save_file(self):
         file_path = os.path.join(self.parent_folder, self.settings_file)
-        
+
         self.settings[1] = self.server
 
         with open(file_path, mode="wb") as sets_file:
