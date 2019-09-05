@@ -16,6 +16,7 @@ class Switcher(QObject):
         "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
         self.settings = []
         self.server = []
+        self.passcode = ""
         self.port = 0
         self.web_sProc = 0
         self.mysql_sProc = 0
@@ -39,6 +40,7 @@ class Switcher(QObject):
             self.settings = json.loads(data)
 
         self.settings_file = self.settings[0]["settings_file"]
+        self.passcode = self.settings[0]["passcode"]
         self.server = self.settings[1]
         print(self.server)
         self.port = self.server[0]["port"]
@@ -92,13 +94,29 @@ class Switcher(QObject):
         return True
 
     def _startMySQL(self):
-        cmd = self.server[1]["path"] + "mysqld"
-        self.mysql_sProc = subprocess.check_output([cmd])
+        self.mysql_sProc = subprocess.Popen(
+                [self.server[1]["path"]+"mysqld"],
+                 stdout=subprocess.PIPE,
+                 stderr=subprocess.STDOUT,
+                 shell=False)
+        print(str(self.mysql_sProc.stdout.read(), 'utf-8'))
+        return True
 
     def _stopMySQL(self):
-        cmd = self.server[1].path +  "mysqladmin" + \
-        " -u root -p " + self.passcode + " shutdown"
-        out = subprocess.check_output([cmd])
+        d = subprocess.Popen(
+                [self.server[1]["path"]+"mysqladmin",
+                 "-u", "root", "-p", "shutdown"],
+                 stdin=subprocess.PIPE,
+                 stdout=subprocess.PIPE,
+                 stderr=subprocess.STDOUT,
+                 shell=True)
+        cmd = self.passcode
+        print('when')
+        got = d.communicate(input=bytes(cmd, 'utf-8'))
+        print('2: ', got)
+        d.kill()
+        d = None
+        return True
 
     def _updateStatus(self, index, new_sts):
         self.server[index]['status'] = new_sts
