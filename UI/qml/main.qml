@@ -12,8 +12,8 @@ ApplicationWindow {
 
     property var serversData: []
     property QtObject llView
-    property bool startEnabled: llView != null ? llView.model.get(llView.currentIndex).status !== 'Running': true
-    property bool stopEnabled: llView != null ? llView.model.get(llView.currentIndex).status === 'Running': true
+    property bool startEnabled: true
+    property bool stopEnabled: false
 
     signal openApp()
     signal openAppFolder()
