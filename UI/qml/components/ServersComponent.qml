@@ -99,6 +99,12 @@ Component {
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Restart")
+                        enabled: stopEnabled
+
+                        onClicked: {
+                            restartServer(lView.model.get(lView.currentIndex).index)
+                        }
+
                     }
 
                     Button {
@@ -119,14 +125,29 @@ Component {
 
                 Button {
                     text: qsTr("Start All")
+
+                    onClicked: {
+                        startAllServers()
+                    }
+
                 }
 
                 Button {
                     text: qsTr("Stop All")
+
+                    onClicked: {
+                        stopAllServers()
+                    }
+
                 }
 
                 Button {
                     text: qsTr("Restart All")
+
+                    onClicked: {
+                        restartAllServers()
+                    }
+
                 }
 
 

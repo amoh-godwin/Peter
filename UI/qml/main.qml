@@ -22,6 +22,10 @@ ApplicationWindow {
 
     signal stopServer(int ind)
     signal startServer(int ind)
+    signal restartServer(int ind)
+    signal restartAllServers()
+    signal startAllServers()
+    signal stopAllServers()
     signal logServerEvent(int ind, string Message)
 
     Component.onCompleted: {
@@ -53,6 +57,30 @@ ApplicationWindow {
         Switcher.startServer(ind)
     }
 
+    onRestartServer: {
+        stopServer(ind);
+        startServer(ind);
+    }
+
+    onRestartAllServers: {
+        for(var i=0; i<serversData.length; i++) {
+            stopServer(i);
+            startServer(i);
+        }
+    }
+
+    onStartAllServers: {
+        for(var i=0; i<serversData.length; i++) {
+            startServer(i);
+        }
+    }
+
+    onStopAllServers: {
+        for(var i=0; i<serversData.length; i++) {
+            stopServer(i);
+        }
+    }
+
     onLogServerEvent: {
         llView.model.get(ind).status = Message
         serversData[ind].status = Message
@@ -71,6 +99,7 @@ ApplicationWindow {
             text: qsTr("Welcome")
             onClicked: stack.push(welcomeComp)
         }
+
         TabButton {
             text: qsTr("Manage Servers")
             onClicked: stack.push(serversComp)
