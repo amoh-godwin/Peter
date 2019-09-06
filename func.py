@@ -103,19 +103,8 @@ class Switcher(QObject):
         return True
 
     def _stopMySQL(self):
-        d = subprocess.Popen(
-                [self.server[1]["path"]+"mysqladmin",
-                 "-u", "root", "-p", "shutdown"],
-                 stdin=subprocess.PIPE,
-                 stdout=subprocess.PIPE,
-                 stderr=subprocess.STDOUT,
-                 shell=True)
-        cmd = self.passcode
-        print('when')
-        got = d.communicate(input=bytes(cmd, 'utf-8'))
-        print('2: ', got)
-        d.kill()
-        d = None
+        self.mysql_sProc.kill()
+        self.mysql_sProc = None
         return True
 
     def _updateStatus(self, index, new_sts):
