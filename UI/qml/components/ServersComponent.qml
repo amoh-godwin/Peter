@@ -68,22 +68,30 @@ Component {
                     Layout.preferredWidth: 124
 
                     Button {
+                        id: stb
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Start")
-                        enabled: lView.model.count > 0 ? lView.model.get(lView.currentIndex).status !== 'Running': true
+                        enabled: startEnabled
 
-                        onClicked: startServer(lView.model.get(lView.currentIndex).index)
+                        onClicked: {
+                            startServer(lView.model.get(lView.currentIndex).index)
+                        }
+
 
                     }
 
                     Button {
+                        id: stob
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Stop")
-                        enabled: lView.model.count > 0 ? lView.model.get(lView.currentIndex).status === 'Running': true
+                        enabled: stopEnabled
 
-                        onClicked: stopServer(lView.model.get(lView.currentIndex).index)
+                        onClicked: {
+                            stopServer(lView.model.get(lView.currentIndex).index)
+                        }
+
 
                     }
 

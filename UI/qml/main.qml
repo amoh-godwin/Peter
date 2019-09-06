@@ -12,6 +12,8 @@ ApplicationWindow {
 
     property var serversData: []
     property QtObject llView
+    property bool startEnabled: llView != null ? llView.model.get(llView.currentIndex).status !== 'Running': true
+    property bool stopEnabled: llView != null ? llView.model.get(llView.currentIndex).status === 'Running': true
 
     signal openApp()
     signal openAppFolder()
@@ -53,6 +55,14 @@ ApplicationWindow {
 
     onLogServerEvent: {
         llView.model.get(ind).status = Message
+        serversData[ind].status = Message
+        if(Message == 'Running') {
+            startEnabled = false
+            stopEnabled = true
+        } else {
+            stopEnabled = false
+            startEnabled = true
+        }
     }
 
 

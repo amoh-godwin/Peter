@@ -15,6 +15,13 @@ Component {
 
             onPressed: {
                 lView.currentIndex = index
+                if(status === "Running") {
+                    startEnabled = false
+                    stopEnabled = true
+                } else {
+                    startEnabled = true
+                    stopEnabled = false
+                }
             }
 
         }
