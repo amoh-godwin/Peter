@@ -23,6 +23,7 @@ class Switcher(QObject):
 
     log = pyqtSignal(list, arguments=['logger'])
     sendStatusInfo = pyqtSignal(list, arguments=['sendStatus'])
+    changedPort = pyqtSignal(str, arguments=['changed_port'])
 
     @pyqtSlot()
     def getStatus(self):
@@ -113,6 +114,23 @@ class Switcher(QObject):
     def logger(self, index, message):
 
         self.log.emit([index, message])
+
+    @pyqtSlot(str)
+    def change_port(self, new_port):
+        port_thread = threading.Thread(target=self._change_port,
+                                       args=[new_port])
+        port_thread.daemon = True
+        port_thread.start()
+
+    def _change_port(self, new_port):
+        # changes the port
+        self.server[0]["port"] = int(new_port)
+        # update UI code also
+        self.changed_port(new_port)
+
+    def changed_port(self, new_port):
+        # send to Qml layer
+        self.changedPort.emit(new_port)
 
     def save_file(self):
         file_path = self.settings_file
