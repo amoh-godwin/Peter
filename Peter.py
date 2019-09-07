@@ -8,18 +8,20 @@ import os
 from PyQt5.QtCore import QCoreApplication, QResource
 from PyQt5.QtGui import QGuiApplication, QIcon
 from PyQt5.QtQml import QQmlApplicationEngine
+from settings import Sets
 from func import Switcher
 from general import GeneralFunc
 
 def cleanUp():
-    switcher.save_file()
+    setts.save_file()
 
 os.environ["QT_QUICK_CONTROLS_STYLE"] = "Universal"
 # QResource.registerResource("")
 app = QGuiApplication(sys.argv)
 # app.setWindowIcon(QIcon(""))
-gen_func = GeneralFunc()
-switcher = Switcher()
+setts = Sets()
+gen_func = GeneralFunc(setts)
+switcher = Switcher(setts)
 
 engine = QQmlApplicationEngine()
 engine.rootContext().setContextProperty("General", gen_func)

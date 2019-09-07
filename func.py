@@ -10,10 +10,9 @@ class Switcher(QObject):
     """
     """
 
-    def __init__(self):
+    def __init__(self, setts):
         QObject.__init__(self)
-        self.status_file = \
-        "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
+        self.setts = setts
         self.settings = []
         self.server = []
         self.passcode = ""
@@ -34,18 +33,11 @@ class Switcher(QObject):
 
     def sendStatus(self):
 
-        file_path = self.status_file
-
-        with open(file_path, mode="rb") as sets_file:
-            data = self._decrypt(sets_file.read())
-            self.settings = json.loads(data)
-
-        self.settings_file = self.settings[0]["settings_file"]
-        self.passcode = self.settings[0]["passcode"]
-        self.server = self.settings[1]
-        print(self.server)
-        self.port = self.server[0]["port"]
-        self.sendStatusInfo.emit(self.server)
+        self.passcode = self.setts.passcode
+        self.server = self.setts.server
+        print(self.setts.server)
+        self.port = self.setts.port
+        self.sendStatusInfo.emit(self.setts.server)
 
     @pyqtSlot(int)
     def startServer(self, index):
@@ -110,6 +102,7 @@ class Switcher(QObject):
 
     def _updateStatus(self, index, new_sts):
         self.server[index]['status'] = new_sts
+        self.setts.server[index]['status'] = new_sts
 
     def logger(self, index, message):
 
@@ -124,27 +117,10 @@ class Switcher(QObject):
 
     def _change_port(self, new_port):
         # changes the port
-        self.server[0]["port"] = int(new_port)
+        self.setts.server[0]["port"] = int(new_port)
         # update UI code also
         self.changed_port(new_port)
 
     def changed_port(self, new_port):
         # send to Qml layer
         self.changedPort.emit(new_port)
-
-    def save_file(self):
-        file_path = self.settings_file
-
-        self.settings[1] = self.server
-
-        with open(file_path, mode="wb") as sets_file:
-            encoded_data = self._encrypt(self.settings)
-            sets_file.write(encoded_data)
-
-    def _encrypt(self, data):
-        return base64.b64encode(bytes(str(data), 'ascii'))
-
-    def _decrypt(self, data):
-        decoded_data = base64.b64decode(data)
-        str_data =  str(decoded_data, 'ascii')
-        return str_data.replace("'", '"')
