@@ -26,6 +26,7 @@ ApplicationWindow {
     signal restartAllServers()
     signal startAllServers()
     signal stopAllServers()
+    signal changePort(string port)
     signal logServerEvent(int ind, string Message)
 
     Component.onCompleted: {
@@ -81,6 +82,10 @@ ApplicationWindow {
         }
     }
 
+    onChangePort: {
+        Switcher.change_port(port)
+    }
+
     onLogServerEvent: {
         llView.model.get(ind).status = Message
         serversData[ind].status = Message
@@ -131,6 +136,11 @@ ApplicationWindow {
         onLog: {
             var ret = logger
             logServerEvent(ret[0], ret[1])
+        }
+
+        onChangedPort: {
+            var val = changed_port
+            serversData[0].port = val
         }
 
         onSendStatusInfo: {

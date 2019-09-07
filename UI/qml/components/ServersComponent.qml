@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Universal 2.3
 
 Component {
     Rectangle {
@@ -111,6 +112,9 @@ Component {
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Configure")
+
+                        onClicked: configureBox.open()
+
                     }
 
                 }
@@ -146,6 +150,76 @@ Component {
 
                     onClicked: {
                         restartAllServers()
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        Popup {
+            id: configureBox
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: 360
+            height: 300
+            modal: true
+
+            ColumnLayout {
+                anchors.fill: parent
+
+                ColumnLayout {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.margins: 8
+
+                    Text {
+                        text: "Port"
+                    }
+
+                    TextField {
+                        id: port_field
+                        selectByMouse: true
+                        text: serversData[0].port.toString()
+                    }
+
+                }
+
+
+                Row {
+                    Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
+
+                    Universal.background: Universal.Lime
+
+                    Button {
+                        text: "Use default"
+                        Universal.accent: Universal.Orange
+
+                        onClicked: {
+                            port_field.text = serversData[0].default_port.toString()
+                        }
+
+                    }
+
+                    Button {
+                        text: "Save"
+
+                        onClicked: {
+                            changePort(port_field.text)
+                            configureBox.close()
+                        }
+
+                    }
+
+                    Button {
+                        text: "Cancel"
+
+                        onClicked: {
+                            configureBox.close()
+                            port_field.text = serversData[0].port.toString()
+                        }
+
                     }
 
                 }
