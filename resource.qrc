@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>UI/qml/main.qml</file>
+        <file>UI/qml/components/ServersComponent.qml</file>
+        <file>UI/qml/components/ServersDelegate.qml</file>
+        <file>UI/qml/components/ServersModel.qml</file>
+        <file>UI/qml/components/WelcomeComponent.qml</file>
+    </qresource>
+</RCC>

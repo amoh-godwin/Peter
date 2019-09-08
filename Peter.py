@@ -16,7 +16,6 @@ def cleanUp():
     setts.save_file()
 
 os.environ["QT_QUICK_CONTROLS_STYLE"] = "Universal"
-# QResource.registerResource("")
 app = QGuiApplication(sys.argv)
 # app.setWindowIcon(QIcon(""))
 setts = Sets()
