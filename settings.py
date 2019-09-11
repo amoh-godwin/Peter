@@ -35,7 +35,6 @@ class Sets():
 
         with open(self.sets_file, mode="rb") as sets_file:
             data = self._decrypt(sets_file.read())
-            print('data: ', data)
             self.settings = json.loads(data)
 
         self.parent_folder = self.settings[0]["parent_folder"]

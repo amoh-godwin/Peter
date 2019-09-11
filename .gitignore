@@ -48,5 +48,6 @@ CMakeLists.txt.user*
 
 # Dist
 dist/*
+build/*
 /mysql
 PHP/*

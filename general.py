@@ -45,8 +45,7 @@ class GeneralFunc(QObject):
         subprocess.run(['explorer', self.setts.addr])
 
     def _openAppFolder(self):
-        url = os.path.abspath(os.path.join(self.setts.parent_folder, "Server")) 
-        print("url", url)
+        url = os.path.abspath(os.path.join(self.setts.parent_folder, "Server"))
         subprocess.run(["explorer", url])
 
     def _openPhpMyAdmin(self):

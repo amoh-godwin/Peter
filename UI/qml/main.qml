@@ -49,13 +49,20 @@ ApplicationWindow {
         General.openSupport()
     }
 
-
     onStopServer: {
-        Switcher.stopServer(ind)
+        if(llView.model.get(ind).status === "Stopped") {
+            return;
+        } else {
+            Switcher.stopServer(ind)
+        }
     }
 
     onStartServer: {
-        Switcher.startServer(ind)
+        if(llView.model.get(ind).status === "Running") {
+            return;
+        } else {
+            Switcher.startServer(ind)
+        }
     }
 
     onRestartServer: {
