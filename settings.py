@@ -44,7 +44,7 @@ class Sets():
         if self.port == 80:
             self.addr = "http://localhost/"
         else:
-            self.addr = "http://localhost" + str(self.port) + "/"
+            self.addr = "http://localhost:" + str(self.port) + "/"
 
     def save_file(self):
         file_path = self.sets_file
