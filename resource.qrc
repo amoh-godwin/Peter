@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <qresource>
+    <qresource prefix="/">
+	<file>UI/images/Peter.png</file>
         <file>UI/qml/main.qml</file>
         <file>UI/qml/components/ServersComponent.qml</file>
         <file>UI/qml/components/ServersDelegate.qml</file>
