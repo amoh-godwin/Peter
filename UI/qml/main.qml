@@ -2,7 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.3
-import "components"
+import "components" as Comp
 
 ApplicationWindow {
     visible: true
@@ -49,13 +49,20 @@ ApplicationWindow {
         General.openSupport()
     }
 
-
     onStopServer: {
-        Switcher.stopServer(ind)
+        if(llView.model.get(ind).status === "Stopped") {
+            return;
+        } else {
+            Switcher.stopServer(ind)
+        }
     }
 
     onStartServer: {
-        Switcher.startServer(ind)
+        if(llView.model.get(ind).status === "Running") {
+            return;
+        } else {
+            Switcher.startServer(ind)
+        }
     }
 
     onRestartServer: {
@@ -121,8 +128,8 @@ ApplicationWindow {
             initialItem: welcomeComp
         }
 
-        WelcomeComponent { id: welcomeComp }
-        ServersComponent { id: serversComp }
+        Comp.WelcomeComponent { id: welcomeComp }
+        Comp.ServersComponent { id: serversComp }
 
     }
 

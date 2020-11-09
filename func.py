@@ -1,8 +1,5 @@
 import threading
-import json
-import os
 import subprocess
-import base64
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
 
 class Switcher(QObject):
@@ -14,9 +11,6 @@ class Switcher(QObject):
         QObject.__init__(self)
         self.setts = setts
         self.settings = []
-        self.server = []
-        self.passcode = ""
-        self.port = 0
         self.web_sProc = 0
         self.mysql_sProc = 0
 
@@ -33,10 +27,6 @@ class Switcher(QObject):
 
     def sendStatus(self):
 
-        self.passcode = self.setts.passcode
-        self.server = self.setts.server
-        print(self.setts.server)
-        self.port = self.setts.port
         self.sendStatusInfo.emit(self.setts.server)
 
     @pyqtSlot(int)
@@ -72,10 +62,8 @@ class Switcher(QObject):
         self.logger(index, 'Stopped')
 
     def _startWebServer(self):
-        # cmd = self.server[0]["path"] + " " + str(self.port)
-        #print(cmd)
-        self.web_sProc = subprocess.Popen([self.server[0]["path"],
-                                           str(self.port)],
+        self.web_sProc = subprocess.Popen([self.setts.server[0]["path"],
+                                           str(self.setts.server[0]["port"])],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT,
                                            shell=False)
@@ -88,11 +76,10 @@ class Switcher(QObject):
 
     def _startMySQL(self):
         self.mysql_sProc = subprocess.Popen(
-                [self.server[1]["path"]+"mysqld"],
+                [self.setts.server[1]["path"]+"mysqld"],
                  stdout=subprocess.PIPE,
                  stderr=subprocess.STDOUT,
                  shell=False)
-        print(str(self.mysql_sProc.stdout.read(), 'utf-8'))
         return True
 
     def _stopMySQL(self):
@@ -101,7 +88,6 @@ class Switcher(QObject):
         return True
 
     def _updateStatus(self, index, new_sts):
-        self.server[index]['status'] = new_sts
         self.setts.server[index]['status'] = new_sts
 
     def logger(self, index, message):

@@ -11,14 +11,13 @@ from PyQt5.QtQml import QQmlApplicationEngine
 from settings import Sets
 from func import Switcher
 from general import GeneralFunc
-
+QResource.registerResource('peter.rcc')
 def cleanUp():
     setts.save_file()
 
 os.environ["QT_QUICK_CONTROLS_STYLE"] = "Universal"
-# QResource.registerResource("")
 app = QGuiApplication(sys.argv)
-# app.setWindowIcon(QIcon(""))
+app.setWindowIcon(QIcon(":/UI/images/Peter.png"))
 setts = Sets()
 gen_func = GeneralFunc(setts)
 switcher = Switcher(setts)
@@ -26,7 +25,7 @@ switcher = Switcher(setts)
 engine = QQmlApplicationEngine()
 engine.rootContext().setContextProperty("General", gen_func)
 engine.rootContext().setContextProperty("Switcher", switcher)
-engine.load("UI/qml/main.qml")
+engine.load(":/UI/qml/main.qml")
 engine.quit.connect(app.quit)
 app.aboutToQuit.connect(cleanUp)
 sys.exit(app.exec_())

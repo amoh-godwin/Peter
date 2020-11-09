@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Universal 2.3
+import "." as Comp
 
 Component {
     Rectangle {
@@ -52,9 +53,9 @@ Component {
                         id: lView
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        model: ServersModel {}
+                        model: Comp.ServersModel {}
 
-                        delegate: ServersDelegate {}
+                        delegate: Comp.ServersDelegate {}
 
                         Component.onCompleted: {
                             lView.currentIndex = 0

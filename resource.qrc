@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>UI/qml/main.qml</file>
+        <file>UI/qml/components/ServersComponent.qml</file>
+        <file>UI/qml/components/ServersComponent.qmlc</file>
+        <file>UI/qml/components/ServersDelegate.qml</file>
+        <file>UI/qml/components/ServersDelegate.qmlc</file>
+        <file>UI/qml/components/ServersModel.qml</file>
+        <file>UI/qml/components/ServersModel.qmlc</file>
+        <file>UI/qml/components/WelcomeComponent.qml</file>
+        <file>UI/qml/components/WelcomeComponent.qmlc</file>
+        <file>UI/images/Peter.png</file>
+    </qresource>
+</RCC>
