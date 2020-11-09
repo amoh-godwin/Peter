@@ -13,7 +13,7 @@ ApplicationWindow {
     property var serversData: []
     property QtObject llView
     property QtObject general
-    property QtObject switcher
+    property QtObject switcher: QtObject {}
     property bool startEnabled: true
     property bool stopEnabled: false
 
@@ -30,10 +30,6 @@ ApplicationWindow {
     signal stopAllServers()
     signal changePort(string port)
     signal logServerEvent(int ind, string Message)
-
-    Component.onCompleted: {
-        switcher.getStatus()
-    }
 
     onOpenApp: {
         general.openApp()

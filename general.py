@@ -12,9 +12,9 @@ from PyQt5.QtCore import QObject, pyqtSlot
 class GeneralFunc(QObject):
 
 
-    def __init__(self, setts):
+    def __init__(self):
         QObject.__init__(self)
-        self.setts = setts
+        #self.setts = setts
 
     @pyqtSlot()
     def openApp(self):

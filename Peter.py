@@ -19,13 +19,17 @@ os.environ["QT_QUICK_CONTROLS_STYLE"] = "Universal"
 app = QGuiApplication(sys.argv)
 app.setWindowIcon(QIcon(":/UI/images/Peter.png"))
 setts = Sets()
-gen_func = GeneralFunc(setts)
-switcher = Switcher(setts)
+gen_func = GeneralFunc()
+switcher = Switcher()
 
 engine = QQmlApplicationEngine()
+
+engine.load("./UI/qml/main.qml")
+
 engine.rootObjects()[0].setProperty("general", gen_func)
 engine.rootObjects()[0].setProperty("switcher", switcher)
-engine.load(":/UI/qml/main.qml")
+engine.rootObjects()[0].setProperty("serversData", setts._get_servers())
+
 engine.quit.connect(app.quit)
 app.aboutToQuit.connect(cleanUp)
 sys.exit(app.exec_())

@@ -1,13 +1,18 @@
 import threading
 import subprocess
+
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
+
+from settings import Sets
+
+setts = Sets()
 
 class Switcher(QObject):
 
     """
     """
 
-    def __init__(self, setts):
+    def __init__(self):
         QObject.__init__(self)
         self.setts = setts
         self.settings = []
@@ -27,7 +32,8 @@ class Switcher(QObject):
 
     def sendStatus(self):
 
-        self.sendStatusInfo.emit(self.setts.server)
+        servers = setts._get_servers()
+        self.sendStatusInfo.emit(servers)
 
     @pyqtSlot(int)
     def startServer(self, index):
