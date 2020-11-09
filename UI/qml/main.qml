@@ -12,6 +12,8 @@ ApplicationWindow {
 
     property var serversData: []
     property QtObject llView
+    property QtObject general
+    property QtObject switcher
     property bool startEnabled: true
     property bool stopEnabled: false
 
@@ -30,30 +32,30 @@ ApplicationWindow {
     signal logServerEvent(int ind, string Message)
 
     Component.onCompleted: {
-        Switcher.getStatus()
+        switcher.getStatus()
     }
 
     onOpenApp: {
-        General.openApp()
+        general.openApp()
     }
 
     onOpenAppFolder: {
-        General.openAppFolder()
+        general.openAppFolder()
     }
 
     onOpenPhpMyAdmin: {
-        General.openPhpMyAdmin()
+        general.openPhpMyAdmin()
     }
 
     onOpenSupport: {
-        General.openSupport()
+        general.openSupport()
     }
 
     onStopServer: {
         if(llView.model.get(ind).status === "Stopped") {
             return;
         } else {
-            Switcher.stopServer(ind)
+            switcher.stopServer(ind)
         }
     }
 
@@ -61,7 +63,7 @@ ApplicationWindow {
         if(llView.model.get(ind).status === "Running") {
             return;
         } else {
-            Switcher.startServer(ind)
+            switcher.startServer(ind)
         }
     }
 
@@ -90,7 +92,7 @@ ApplicationWindow {
     }
 
     onChangePort: {
-        Switcher.change_port(port)
+        switcher.change_port(port)
     }
 
     onLogServerEvent: {
@@ -134,24 +136,24 @@ ApplicationWindow {
     }
 
     Connections {
-        target: General
+        target: general
     }
 
     Connections {
-        target: Switcher
+        target: switcher
 
-        onLog: {
-            var ret = logger
+        function onLog(logs) {
+            var ret = logs
             logServerEvent(ret[0], ret[1])
         }
 
-        onChangedPort: {
+        function onChangedPort(changed_port) {
             var val = changed_port
             serversData[0].port = val
         }
 
-        onSendStatusInfo: {
-            var ret = sendStatus
+        function onSendStatusInfo(statusInfo) {
+            var ret = statusInfo
             serversData = ret
         }
 
