@@ -7,6 +7,10 @@ Created on Sat Sep  7 10:44:51 2019
 import os
 import json
 import base64
+import sqlite3
+
+conn = sqlite3.connect('settings.db')
+cursor = conn.cursor()
 
 class Sets():
 
@@ -54,3 +58,6 @@ class Sets():
         with open(file_path, mode="wb") as sets_file:
             encoded_data = self._encrypt(self.settings)
             sets_file.write(encoded_data)
+
+
+conn.close()
