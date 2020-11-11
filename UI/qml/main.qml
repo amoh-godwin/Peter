@@ -11,6 +11,7 @@ ApplicationWindow {
     title: qsTr("Welcome")
 
     property var serversData: []
+    property var databasesData: []
     property QtObject llView
     property QtObject general
     property QtObject switcher
@@ -23,12 +24,19 @@ ApplicationWindow {
     signal openSupport()
 
     signal stopServer(int ind)
+    signal stopDatabase(int ind)
     signal startServer(int ind)
+    signal startDatabase(int ind)
     signal restartServer(int ind)
+    signal restartDatabase(int ind)
     signal restartAllServers()
+    signal restartAllDatabases()
     signal startAllServers()
+    signal startAllDatabases()
     signal stopAllServers()
+    signal stopAllDatabases()
     signal changePort(string port)
+    signal changeDBPort(string port)
     signal logServerEvent(int ind, string Message)
 
     onOpenApp: {
@@ -91,6 +99,10 @@ ApplicationWindow {
         switcher.change_port(port)
     }
 
+    onChangeDBPort: {
+        switcher.change_db_port(port)
+    }
+
     onLogServerEvent: {
         llView.model.get(ind).status = Message
         serversData[ind].status = Message
@@ -114,6 +126,12 @@ ApplicationWindow {
             text: qsTr("Manage Servers")
             onClicked: stack.push(serversComp)
         }
+
+        TabButton {
+            text: qsTr("Manage Databases")
+            onClicked: stack.push(databasesComp)
+        }
+
     }
 
     Rectangle {
@@ -128,6 +146,7 @@ ApplicationWindow {
 
         Comp.WelcomeComponent { id: welcomeComp }
         Comp.ServersComponent { id: serversComp }
+        Comp.DatabasesComponent { id: databasesComp }
 
     }
 
