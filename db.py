@@ -3,7 +3,7 @@ import sqlite3
 conn = sqlite3.connect('settings.db')
 cursor = conn.cursor()
 
-sql = """SELECT * FROM Servers"""
+sql = """SELECT * FROM Databases"""
 cursor.execute(sql)
 al = cursor.fetchall()
 info = {}
