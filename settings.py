@@ -84,6 +84,7 @@ class Sets():
         for server in all_servers:
             info['id'] = int(server[0])
             info['name'] = server[2]
+            info['path'] = server[3]
             info['default_port'] = int(server[4])
             info['port'] = int(server[5])
             info['status'] = server[6]
@@ -104,6 +105,7 @@ class Sets():
         for db in all_db:
             info['id'] = int(db[0])
             info['name'] = db[2]
+            info['path'] = db[3]
             info['default_port'] = int(db[4])
             info['port'] = int(db[5])
             info['status'] = db[6]
