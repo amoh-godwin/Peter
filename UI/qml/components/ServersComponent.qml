@@ -182,7 +182,7 @@ Component {
                     TextField {
                         id: port_field
                         selectByMouse: true
-                        text: serversData[0].port.toString()
+                        text: serversData[lView.currentIndex].port.toString()
                     }
 
                 }
@@ -198,7 +198,7 @@ Component {
                         Universal.accent: Universal.Orange
 
                         onClicked: {
-                            port_field.text = serversData[0].default_port.toString()
+                            port_field.text = serversData[lView.currentIndex].default_port.toString()
                         }
 
                     }
@@ -218,7 +218,7 @@ Component {
 
                         onClicked: {
                             configureBox.close()
-                            port_field.text = serversData[0].port.toString()
+                            port_field.text = serversData[lView.currentIndex].port.toString()
                         }
 
                     }
