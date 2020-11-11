@@ -22,8 +22,9 @@ def select():
     print(servers)
 
 def update():
-    sql = """UPDATE Databases SET id=0"""
+    sql = """UPDATE Servers SET upath='./Peterd'"""
     cursor.execute(sql)
     conn.commit()
 
+select()
 conn.close()
