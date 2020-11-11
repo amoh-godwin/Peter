@@ -39,7 +39,8 @@ class Sets():
         self.addr = None
         self.parent_folder = ""
         self.passcode = None
-        self.read_file()
+        self._get_servers()
+        self._get_databases()
 
     def _encrypt(self, data):
         return base64.b64encode(bytes(str(data), 'ascii'))
