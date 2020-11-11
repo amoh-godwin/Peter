@@ -85,7 +85,8 @@ class Sets():
             info['port'] = int(server[5])
             info['status'] = server[6]
 
-        servers.append(info)
+            servers.append(info)
+
         return servers
 
     def _get_databases(self):
@@ -102,5 +103,6 @@ class Sets():
             info['port'] = int(db[5])
             info['status'] = db[6]
 
-        databases.append(info)
+            databases.append(info)
+            
         return databases
