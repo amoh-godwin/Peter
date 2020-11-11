@@ -33,6 +33,8 @@ class Sets():
         "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
         self.settings = None
         self.server = None
+        self.servers = None
+        self.databases = None
         self.port = None
         self.addr = None
         self.parent_folder = ""
@@ -87,7 +89,9 @@ class Sets():
 
             servers.append(info)
 
-        return servers
+        self.servers = servers
+
+        return self.servers
 
     def _get_databases(self):
         sql = """SELECT * FROM Databases"""
@@ -104,5 +108,6 @@ class Sets():
             info['status'] = db[6]
 
             databases.append(info)
-            
-        return databases
+
+        self.databases = databases
+        return self.databases
