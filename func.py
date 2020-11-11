@@ -72,10 +72,7 @@ class Switcher(QObject):
 
     def _startDatabase(self, id):
     
-        if id == 0:
-            self._startWebServer()
-        else:
-            self._startMySQL()
+        self._startMySQL(id)
         self._updateStatus(id, 'Running')
         self.logger(id, 'Running')
 
@@ -111,17 +108,17 @@ class Switcher(QObject):
         self.web_sProc[id] = None
         return True
 
-    def _startMySQL(self):
-        self.mysql_sProc = subprocess.Popen(
-                [self.setts.server[1]["path"]+"mysqld"],
+    def _startMySQL(self, id):
+        self.mysql_sProc[id] = subprocess.Popen(
+                [self.setts.server[id]["path"]+"mysqld"],
                  stdout=subprocess.PIPE,
                  stderr=subprocess.STDOUT,
                  shell=False)
         return True
 
     def _stopMySQL(self):
-        self.mysql_sProc.kill()
-        self.mysql_sProc = None
+        self.mysql_sProc[id].kill()
+        self.mysql_sProc[id] = None
         return True
 
     def _updateStatus(self, index, new_sts):
