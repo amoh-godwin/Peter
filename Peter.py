@@ -29,6 +29,7 @@ engine.load("./UI/qml/main.qml")
 engine.rootObjects()[0].setProperty("general", gen_func)
 engine.rootObjects()[0].setProperty("switcher", switcher)
 engine.rootObjects()[0].setProperty("serversData", setts._get_servers())
+engine.rootObjects()[0].setProperty("databasesData", setts._get_databases())
 
 engine.quit.connect(app.quit)
 app.aboutToQuit.connect(cleanUp)

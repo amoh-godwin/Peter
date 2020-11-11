@@ -87,3 +87,20 @@ class Sets():
 
         servers.append(info)
         return servers
+
+    def _get_databases(self):
+        sql = """SELECT * FROM Databases"""
+        cursor.execute(sql)
+        all_db = cursor.fetchall()
+
+        info = {}
+        databases = []
+        for db in all_db:
+            info['id'] = int(db[0])
+            info['name'] = db[2]
+            info['default_port'] = int(db[4])
+            info['port'] = int(db[5])
+            info['status'] = db[6]
+
+        databases.append(info)
+        return databases
