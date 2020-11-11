@@ -38,6 +38,7 @@ ApplicationWindow {
     signal changePort(string port)
     signal changeDBPort(string port)
     signal logServerEvent(int ind, string Message)
+    signal logDatabaseEvent(int ind, string Message)
 
     onOpenApp: {
         general.openApp()
@@ -155,6 +156,18 @@ ApplicationWindow {
         }
     }
 
+    onLogDatabaseEvent: {
+        llView.model.get(ind).status = Message
+        databasesData[ind].status = Message
+        if(Message == 'Running') {
+            startEnabled = false
+            stopEnabled = true
+        } else {
+            stopEnabled = false
+            startEnabled = true
+        }
+    }
+
 
     menuBar: TabBar {
         TabButton {
@@ -200,6 +213,11 @@ ApplicationWindow {
         function onLog(logs) {
             var ret = logs
             logServerEvent(ret[0], ret[1])
+        }
+
+        function onLogDB(logs) {
+            var ret = logs
+            logDatabaseEvent(ret[0], ret[1])
         }
 
         function onChangedPort(changed_port) {

@@ -21,6 +21,7 @@ class Switcher(QObject):
         self.mysql_sProc = {}
 
     log = pyqtSignal(list, arguments=['logger'])
+    logDB = pyqtSignal(list, arguments=['logger'])
     sendStatusInfo = pyqtSignal(list, arguments=['sendStatus'])
     changedPort = pyqtSignal(str, arguments=['changed_port'])
     changedDBPort = pyqtSignal(str, arguments=['changed_db_port'])
@@ -75,7 +76,7 @@ class Switcher(QObject):
     
         self._startMySQL(id)
         self._updateDatabaseStatus(id, 'Running')
-        self.logger(id, 'Running')
+        self.db_logger(id, 'Running')
 
     def _stopServer(self, id):
 
@@ -87,7 +88,7 @@ class Switcher(QObject):
     
         self._stopMySQL(id)
         self._updateDatabaseStatus(id, 'Stopped')
-        self.logger(id, 'Stopped')
+        self.db_logger(id, 'Stopped')
 
     def _startWebServer(self, id):
         print(self.setts.servers[id]["path"])
@@ -113,7 +114,7 @@ class Switcher(QObject):
                  shell=False)
         return True
 
-    def _stopMySQL(self):
+    def _stopMySQL(self, id):
         self.mysql_sProc[id].kill()
         self.mysql_sProc[id] = None
         return True
@@ -127,6 +128,10 @@ class Switcher(QObject):
     def logger(self, index, message):
 
         self.log.emit([index, message])
+
+    def db_logger(self, index, message):
+    
+        self.logDB.emit([index, message])
 
     @pyqtSlot(str)
     def change_port(self, new_port):
