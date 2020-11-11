@@ -13,7 +13,8 @@ from func import Switcher
 from general import GeneralFunc
 QResource.registerResource('peter.rcc')
 def cleanUp():
-    setts.save_file()
+    #setts.save_file()
+    pass
 
 os.environ["QT_QUICK_CONTROLS_STYLE"] = "Universal"
 app = QGuiApplication(sys.argv)
