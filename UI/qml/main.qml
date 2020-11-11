@@ -63,6 +63,14 @@ ApplicationWindow {
         }
     }
 
+    onStopDatabase: {
+        if(llView.model.get(ind).status === "Stopped") {
+            return;
+        } else {
+            switcher.stopDatabase(ind)
+        }
+    }
+
     onStartServer: {
         if(llView.model.get(ind).status === "Running") {
             return;
@@ -71,9 +79,22 @@ ApplicationWindow {
         }
     }
 
+    onStartDatabase: {
+        if(llView.model.get(ind).status === "Running") {
+            return;
+        } else {
+            switcher.startDatabase(ind)
+        }
+    }
+
     onRestartServer: {
         stopServer(ind);
         startServer(ind);
+    }
+
+    onRestartDatabase: {
+        stopDatabase(ind);
+        startDatabase(ind);
     }
 
     onRestartAllServers: {
@@ -83,15 +104,34 @@ ApplicationWindow {
         }
     }
 
+    onRestartAllDatabases: {
+        for(var i=0; i<databasesData.length; i++) {
+            stopDatabase(i);
+            startDatabase(i);
+        }
+    }
+
     onStartAllServers: {
         for(var i=0; i<serversData.length; i++) {
             startServer(i);
         }
     }
 
+    onStartAllDatabases: {
+        for(var i=0; i<databasesData.length; i++) {
+            startDatabase(i);
+        }
+    }
+
     onStopAllServers: {
         for(var i=0; i<serversData.length; i++) {
             stopServer(i);
+        }
+    }
+
+    onStopAllDatabases: {
+        for(var i=0; i<databasesData.length; i++) {
+            stopDatabase(i);
         }
     }
 
