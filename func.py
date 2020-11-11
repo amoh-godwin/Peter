@@ -16,8 +16,8 @@ class Switcher(QObject):
         QObject.__init__(self)
         self.setts = setts
         self.settings = []
-        self.web_sProc = 0
-        self.mysql_sProc = 0
+        self.web_sProc = {}
+        self.mysql_sProc = {}
 
     log = pyqtSignal(list, arguments=['logger'])
     sendStatusInfo = pyqtSignal(list, arguments=['sendStatus'])
@@ -66,10 +66,7 @@ class Switcher(QObject):
 
     def _startServer(self, id):
 
-        if id == 0:
-            self._startWebServer()
-        else:
-            self._startMySQL()
+        self._startWebServer(id)
         self._updateStatus(id, 'Running')
         self.logger(id, 'Running')
 
@@ -100,17 +97,18 @@ class Switcher(QObject):
         self._updateStatus(id, 'Stopped')
         self.logger(id, 'Stopped')
 
-    def _startWebServer(self):
-        self.web_sProc = subprocess.Popen([self.setts.server[0]["path"],
-                                           str(self.setts.server[0]["port"])],
+    def _startWebServer(self, id):
+        self.web_sProc[id] = subprocess.Popen([self.setts.server[id]["path"],
+                                           str(self.setts.server[id]["port"])],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT,
                                            shell=False)
+
         return True
 
-    def _stopWebServer(self):
-        self.web_sProc.kill()
-        self.web_sProc = None
+    def _stopWebServer(self, id):
+        self.web_sProc[id].kill()
+        self.web_sProc[id] = None
         return True
 
     def _startMySQL(self):
