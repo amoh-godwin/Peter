@@ -13,7 +13,7 @@ ApplicationWindow {
     property var serversData: []
     property QtObject llView
     property QtObject general
-    property QtObject switcher: QtObject {}
+    property QtObject switcher
     property bool startEnabled: true
     property bool stopEnabled: false
 
