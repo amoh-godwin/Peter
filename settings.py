@@ -3,6 +3,18 @@
 Created on Sat Sep  7 10:44:51 2019
 
 @author: Ampofo
+
+Server and Database db uses Table Columns
+
+- id
+- uip
+- uname
+- upath
+- default_port
+- port
+- status
+
+
 """
 import os
 import json
@@ -59,5 +71,19 @@ class Sets():
             encoded_data = self._encrypt(self.settings)
             sets_file.write(encoded_data)
 
+    def _get_servers(self):
+        sql = """SELECT * FROM Servers"""
+        cursor.execute(sql)
+        all_servers = cursor.fetchall()
 
-conn.close()
+        info = {}
+        servers = []
+        for server in all_servers:
+            info['id'] = int(server[0])
+            info['name'] = server[2]
+            info['default_port'] = int(server[4])
+            info['port'] = int(server[5])
+            info['status'] = server[6]
+
+        servers.append(info)
+        return servers
