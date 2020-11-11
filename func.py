@@ -1,5 +1,6 @@
 import threading
 import subprocess
+import os
 
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
 
@@ -67,40 +68,36 @@ class Switcher(QObject):
     def _startServer(self, id):
 
         self._startWebServer(id)
-        self._updateStatus(id, 'Running')
+        self._updateServerStatus(id, 'Running')
         self.logger(id, 'Running')
 
     def _startDatabase(self, id):
     
         self._startMySQL(id)
-        self._updateStatus(id, 'Running')
+        self._updateDatabaseStatus(id, 'Running')
         self.logger(id, 'Running')
 
     def _stopServer(self, id):
 
-        if id == 0:
-            self._stopWebServer()
-        else:
-            self._stopMySQL()
+        self._stopWebServer(id)
         self._updateStatus(id, 'Stopped')
         self.logger(id, 'Stopped')
 
     def _stopDatabase(self, id):
     
-        if id == 0:
-            self._stopWebServer()
-        else:
-            self._stopMySQL()
+        self._stopWebServer(id)
         self._updateStatus(id, 'Stopped')
         self.logger(id, 'Stopped')
 
     def _startWebServer(self, id):
-        self.web_sProc[id] = subprocess.Popen([self.setts.server[id]["path"],
-                                           str(self.setts.server[id]["port"])],
+        print(self.setts.servers[id]["path"])
+        self.web_sProc[id] = subprocess.Popen([self.setts.servers[id]["path"],
+                                           str(self.setts.servers[id]["port"])],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT,
                                            shell=False)
 
+        print(self.web_sProc[id])
         return True
 
     def _stopWebServer(self, id):
@@ -121,8 +118,11 @@ class Switcher(QObject):
         self.mysql_sProc[id] = None
         return True
 
-    def _updateStatus(self, index, new_sts):
-        self.setts.server[index]['status'] = new_sts
+    def _updateServerStatus(self, index, new_sts):
+        self.setts.servers[index]['status'] = new_sts
+
+    def _updateDatabaseStatus(self, index, new_sts):
+        self.setts.databases[index]['status'] = new_sts
 
     def logger(self, index, message):
 
