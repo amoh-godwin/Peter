@@ -23,12 +23,12 @@ ApplicationWindow {
     signal openPhpMyAdmin()
     signal openSupport()
 
-    signal stopServer(int ind)
-    signal stopDatabase(int ind)
-    signal startServer(int ind)
-    signal startDatabase(int ind)
-    signal restartServer(int ind)
-    signal restartDatabase(int ind)
+    signal stopServer(int id)
+    signal stopDatabase(int id)
+    signal startServer(int id)
+    signal startDatabase(int id)
+    signal restartServer(int id)
+    signal restartDatabase(int id)
     signal restartAllServers()
     signal restartAllDatabases()
     signal startAllServers()
@@ -56,45 +56,45 @@ ApplicationWindow {
     }
 
     onStopServer: {
-        if(llView.model.get(ind).status === "Stopped") {
+        if(llView.model.get(id).status === "Stopped") {
             return;
         } else {
-            switcher.stopServer(ind)
+            switcher.stopServer(id)
         }
     }
 
     onStopDatabase: {
-        if(llView.model.get(ind).status === "Stopped") {
+        if(llView.model.get(id).status === "Stopped") {
             return;
         } else {
-            switcher.stopDatabase(ind)
+            switcher.stopDatabase(id)
         }
     }
 
     onStartServer: {
-        if(llView.model.get(ind).status === "Running") {
+        if(llView.model.get(id).status === "Running") {
             return;
         } else {
-            switcher.startServer(ind)
+            switcher.startServer(id)
         }
     }
 
     onStartDatabase: {
-        if(llView.model.get(ind).status === "Running") {
+        if(llView.model.get(id).status === "Running") {
             return;
         } else {
-            switcher.startDatabase(ind)
+            switcher.startDatabase(id)
         }
     }
 
     onRestartServer: {
-        stopServer(ind);
-        startServer(ind);
+        stopServer(id);
+        startServer(id);
     }
 
     onRestartDatabase: {
-        stopDatabase(ind);
-        startDatabase(ind);
+        stopDatabase(id);
+        startDatabase(id);
     }
 
     onRestartAllServers: {

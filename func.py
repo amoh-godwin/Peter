@@ -37,68 +37,68 @@ class Switcher(QObject):
         self.sendStatusInfo.emit(servers)
 
     @pyqtSlot(int)
-    def startServer(self, index):
+    def startServer(self, id):
 
-        start_thread = threading.Thread(target=self._startServer, args=[index])
+        start_thread = threading.Thread(target=self._startServer, args=[id])
         start_thread.daemon = True
         start_thread.start()
 
     @pyqtSlot(int)
-    def startDatabase(self, index):
+    def startDatabase(self, id):
 
-        start_thread = threading.Thread(target=self._startDatabase, args=[index])
+        start_thread = threading.Thread(target=self._startDatabase, args=[id])
         start_thread.daemon = True
         start_thread.start()
 
     @pyqtSlot(int)
-    def stopServer(self, index):
+    def stopServer(self, id):
 
-        stop_thread = threading.Thread(target=self._stopServer, args=[index])
+        stop_thread = threading.Thread(target=self._stopServer, args=[id])
         stop_thread.daemon = True
         stop_thread.start()
 
     @pyqtSlot(int)
-    def stopDatabase(self, index):
+    def stopDatabase(self, id):
 
-        stop_thread = threading.Thread(target=self._stopDatabase, args=[index])
+        stop_thread = threading.Thread(target=self._stopDatabase, args=[id])
         stop_thread.daemon = True
         stop_thread.start()
 
-    def _startServer(self, index):
+    def _startServer(self, id):
 
-        if index == 0:
+        if id == 0:
             self._startWebServer()
         else:
             self._startMySQL()
-        self._updateStatus(index, 'Running')
-        self.logger(index, 'Running')
+        self._updateStatus(id, 'Running')
+        self.logger(id, 'Running')
 
-    def _startDatabase(self, index):
+    def _startDatabase(self, id):
     
-        if index == 0:
+        if id == 0:
             self._startWebServer()
         else:
             self._startMySQL()
-        self._updateStatus(index, 'Running')
-        self.logger(index, 'Running')
+        self._updateStatus(id, 'Running')
+        self.logger(id, 'Running')
 
-    def _stopServer(self, index):
+    def _stopServer(self, id):
 
-        if index == 0:
+        if id == 0:
             self._stopWebServer()
         else:
             self._stopMySQL()
-        self._updateStatus(index, 'Stopped')
-        self.logger(index, 'Stopped')
+        self._updateStatus(id, 'Stopped')
+        self.logger(id, 'Stopped')
 
-    def _stopDatabase(self, index):
+    def _stopDatabase(self, id):
     
-        if index == 0:
+        if id == 0:
             self._stopWebServer()
         else:
             self._stopMySQL()
-        self._updateStatus(index, 'Stopped')
-        self.logger(index, 'Stopped')
+        self._updateStatus(id, 'Stopped')
+        self.logger(id, 'Stopped')
 
     def _startWebServer(self):
         self.web_sProc = subprocess.Popen([self.setts.server[0]["path"],

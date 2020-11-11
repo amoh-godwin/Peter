@@ -77,7 +77,7 @@ Component {
                         enabled: startEnabled
 
                         onClicked: {
-                            startServer(lView.model.get(lView.currentIndex).index)
+                            startServer(lView.model.get(lView.currentIndex).id)
                         }
 
 
@@ -91,7 +91,7 @@ Component {
                         enabled: stopEnabled
 
                         onClicked: {
-                            stopServer(lView.model.get(lView.currentIndex).index)
+                            stopServer(lView.model.get(lView.currentIndex).id)
                         }
 
 
@@ -104,7 +104,7 @@ Component {
                         enabled: stopEnabled
 
                         onClicked: {
-                            restartServer(lView.model.get(lView.currentIndex).index)
+                            restartServer(lView.model.get(lView.currentIndex).id)
                         }
 
                     }

@@ -77,7 +77,7 @@ Component {
                         enabled: startEnabled
 
                         onClicked: {
-                            startDatabase(lView.model.get(lView.currentIndex).index)
+                            startDatabase(lView.model.get(lView.currentIndex).id)
                         }
 
 
@@ -91,7 +91,7 @@ Component {
                         enabled: stopEnabled
 
                         onClicked: {
-                            stopDatabase(lView.model.get(lView.currentIndex).index)
+                            stopDatabase(lView.model.get(lView.currentIndex).id)
                         }
 
 
@@ -104,7 +104,7 @@ Component {
                         enabled: stopEnabled
 
                         onClicked: {
-                            restartDatabase(lView.model.get(lView.currentIndex).index)
+                            restartDatabase(lView.model.get(lView.currentIndex).id)
                         }
 
                     }
