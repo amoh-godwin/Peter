@@ -80,13 +80,13 @@ class Switcher(QObject):
     def _stopServer(self, id):
 
         self._stopWebServer(id)
-        self._updateStatus(id, 'Stopped')
+        self._updateServerStatus(id, 'Stopped')
         self.logger(id, 'Stopped')
 
     def _stopDatabase(self, id):
     
-        self._stopWebServer(id)
-        self._updateStatus(id, 'Stopped')
+        self._stopMySQL(id)
+        self._updateDatabaseStatus(id, 'Stopped')
         self.logger(id, 'Stopped')
 
     def _startWebServer(self, id):
