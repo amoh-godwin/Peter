@@ -16,11 +16,11 @@ Component {
             onPressed: {
                 lView.currentIndex = index
                 if(status === "Running") {
-                    startEnabled = false
-                    stopEnabled = true
+                    databaseCompId.startEnabled = false
+                    databaseCompId.stopEnabled = true
                 } else {
-                    startEnabled = true
-                    stopEnabled = false
+                    databaseCompId.startEnabled = true
+                    databaseCompId.stopEnabled = false
                 }
             }
 

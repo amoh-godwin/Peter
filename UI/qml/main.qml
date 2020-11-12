@@ -15,8 +15,8 @@ ApplicationWindow {
     property QtObject llView
     property QtObject general
     property QtObject switcher
-    property bool startEnabled: true
-    property bool stopEnabled: false
+    //property bool startEnabled: true
+    //property bool stopEnabled: false
 
     signal openApp()
     signal openAppFolder()
@@ -39,6 +39,9 @@ ApplicationWindow {
     signal changeDBPort(string port)
     signal logServerEvent(int ind, string Message)
     signal logDatabaseEvent(int ind, string Message)
+
+    Comp.DatabaseCompSettings { id: databaseCompId }
+    Comp.ServerCompSettings { id: serverCompId }
 
     onOpenApp: {
         general.openApp()
@@ -148,11 +151,11 @@ ApplicationWindow {
         llView.model.get(ind).status = Message
         serversData[ind].status = Message
         if(Message == 'Running') {
-            startEnabled = false
-            stopEnabled = true
+            serverCompId.startEnabled = false
+            serverCompId.stopEnabled = true
         } else {
-            stopEnabled = false
-            startEnabled = true
+            serverCompId.stopEnabled = false
+            serverCompId.startEnabled = true
         }
     }
 
@@ -160,14 +163,13 @@ ApplicationWindow {
         llView.model.get(ind).status = Message
         databasesData[ind].status = Message
         if(Message == 'Running') {
-            startEnabled = false
-            stopEnabled = true
+            databaseCompId.startEnabled = false
+            databaseCompId.stopEnabled = true
         } else {
-            stopEnabled = false
-            startEnabled = true
+            databaseCompId.stopEnabled = false
+            databaseCompId.startEnabled = true
         }
     }
-
 
     menuBar: TabBar {
         TabButton {

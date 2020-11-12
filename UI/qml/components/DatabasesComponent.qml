@@ -74,7 +74,7 @@ Component {
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Start")
-                        enabled: startEnabled
+                        enabled: databaseCompId.startEnabled
 
                         onClicked: {
                             startDatabase(lView.model.get(lView.currentIndex).id)
@@ -88,7 +88,7 @@ Component {
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Stop")
-                        enabled: stopEnabled
+                        enabled: databaseCompId.stopEnabled
 
                         onClicked: {
                             stopDatabase(lView.model.get(lView.currentIndex).id)
@@ -101,7 +101,7 @@ Component {
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Restart")
-                        enabled: stopEnabled
+                        enabled: databaseCompId.stopEnabled
 
                         onClicked: {
                             restartDatabase(lView.model.get(lView.currentIndex).id)
