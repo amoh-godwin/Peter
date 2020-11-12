@@ -86,7 +86,7 @@ class Switcher(QObject):
         self.logger(id, 'Stopped')
 
     def _stopDatabase(self, id):
-    
+
         self._stopMySQL(id)
         self._updateDatabaseStatus(id, 'Stopped')
         self.db_logger(id, 'Stopped')
@@ -181,6 +181,10 @@ class Switcher(QObject):
         self.setts.server[0]["port"] = int(new_port)
         # update UI code also
         self.changed_db_port(new_port)
+
+    def changed_port(self, new_port):
+        # send to Qml layer
+        self.changedPort.emit(new_port)
 
     def changed_db_port(self, new_port):
         # send to Qml layer
