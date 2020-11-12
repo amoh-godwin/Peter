@@ -21,8 +21,6 @@ import json
 import base64
 import sqlite3
 
-conn = sqlite3.connect('settings.db')
-cursor = conn.cursor()
 
 class Sets():
 
@@ -65,6 +63,40 @@ class Sets():
         else:
             self.addr = "http://localhost:" + str(self.port) + "/"
 
+    def save_server_pid(self, id, pid):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""UPDATE server_processes SET pid={pid} WHERE server_id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
+    def save_database_pid(self, id, pid):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""UPDATE database_processes SET pid={pid} WHERE server_id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
+    def remove_server_pid(self, id):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        pid = 0
+        sql = f"""UPDATE server_processes SET pid={pid} WHERE server_id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
+    def remove_database_pid(self, id):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        pid = 0
+        sql = f"""UPDATE database_processes SET pid={pid} WHERE server_id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
     def save_file(self):
         file_path = self.sets_file
 
@@ -75,6 +107,8 @@ class Sets():
             sets_file.write(encoded_data)
 
     def _get_servers(self):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
         sql = """SELECT * FROM Servers"""
         cursor.execute(sql)
         all_servers = cursor.fetchall()
@@ -92,10 +126,14 @@ class Sets():
             servers.append(info)
 
         self.servers = servers
+        
+        conn.close()
 
         return self.servers
 
     def _get_databases(self):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
         sql = """SELECT * FROM Databases"""
         cursor.execute(sql)
         all_db = cursor.fetchall()
@@ -112,5 +150,6 @@ class Sets():
 
             databases.append(info)
 
+        conn.close()
         self.databases = databases
         return self.databases
