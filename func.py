@@ -3,6 +3,7 @@ import subprocess
 import os
 
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
+import psutil
 
 from settings import Sets
 
@@ -92,31 +93,51 @@ class Switcher(QObject):
 
     def _startWebServer(self, id):
         print(self.setts.servers[id]["path"])
-        self.web_sProc[id] = subprocess.Popen([self.setts.servers[id]["path"],
+        proc = subprocess.Popen([self.setts.servers[id]["path"],
                                            str(self.setts.servers[id]["port"])],
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT,
                                            shell=False)
 
-        print(self.web_sProc[id])
+        # store the pid
+        pid = proc.pid
+        self.web_sProc[id] = pid
+        self.setts.save_server_pid(id, pid)
+
         return True
 
     def _stopWebServer(self, id):
-        self.web_sProc[id].kill()
+        pid = self.web_sProc[id]
+        p = psutil.Process(pid)
+        p.terminate()
+
+        # remove the pid
         self.web_sProc[id] = None
+        self.setts.remove_server_pid(id)
+
         return True
 
     def _startMySQL(self, id):
-        self.mysql_sProc[id] = subprocess.Popen(
+        proc = subprocess.Popen(
                 [self.setts.server[id]["path"]+"mysqld"],
                  stdout=subprocess.PIPE,
                  stderr=subprocess.STDOUT,
                  shell=False)
+
+        # store the pid
+        pid = proc.pid
+        self.mysql_sProc[id] = pid
+        self.setts.save_database_pid(id, pid)
         return True
 
     def _stopMySQL(self, id):
-        self.mysql_sProc[id].kill()
+        pid = self.mysql_sProc[id]
+        p = psutil.Process(pid)
+        p.terminate()
+
+        # remove the pid
         self.mysql_sProc[id] = None
+        self.setts.remove_database_pid(id)
         return True
 
     def _updateServerStatus(self, index, new_sts):
