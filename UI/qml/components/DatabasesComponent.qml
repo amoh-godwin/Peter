@@ -100,18 +100,6 @@ Component {
                     Button {
                         Layout.preferredWidth: 82
                         Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Restart")
-                        enabled: databaseCompId.stopEnabled
-
-                        onClicked: {
-                            restartDatabase(lView.model.get(lView.currentIndex).id)
-                        }
-
-                    }
-
-                    Button {
-                        Layout.preferredWidth: 82
-                        Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Configure")
 
                         onClicked: configureBox.open()
@@ -142,15 +130,6 @@ Component {
 
                     onClicked: {
                         stopAllDatabases()
-                    }
-
-                }
-
-                Button {
-                    text: qsTr("Restart All")
-
-                    onClicked: {
-                        restartAllDatabases()
                     }
 
                 }

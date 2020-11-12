@@ -91,30 +91,6 @@ ApplicationWindow {
         }
     }
 
-    onRestartServer: {
-        stopServer(id);
-        startServer(id);
-    }
-
-    onRestartDatabase: {
-        stopDatabase(id);
-        startDatabase(id);
-    }
-
-    onRestartAllServers: {
-        for(var i=0; i<serversData.length; i++) {
-            stopServer(i);
-            startServer(i);
-        }
-    }
-
-    onRestartAllDatabases: {
-        for(var i=0; i<databasesData.length; i++) {
-            stopDatabase(i);
-            startDatabase(i);
-        }
-    }
-
     onStartAllServers: {
         for(var i=0; i<serversData.length; i++) {
             startServer(i);
