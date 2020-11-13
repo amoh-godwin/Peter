@@ -38,6 +38,17 @@ Component {
                         ToolSeparator {}
 
                         Rectangle {
+                            Layout.preferredWidth: 68
+                            //Layout.preferredHeight: 48
+                            Label {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: qsTr("Port")
+                            }
+                        }
+
+                        ToolSeparator {}
+
+                        Rectangle {
                             Layout.fillWidth: true
                             //Layout.preferredHeight: 48
                             Label {

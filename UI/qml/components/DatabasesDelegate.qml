@@ -43,6 +43,16 @@ Component {
             //ToolSeparator {}
 
             Rectangle {
+                Layout.preferredWidth: 68
+                Layout.preferredHeight: 48
+                color: 'transparent'
+                Label {
+                    anchors.centerIn: parent
+                    text: port
+                }
+            }
+
+            Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
                 color: 'transparent'

@@ -250,10 +250,12 @@ ApplicationWindow {
 
         function onChangedPort(id, changed_port) {
             serversData[id].port = changed_port
+            llView.model.setProperty(id, "port", changed_port)
         }
 
         function onChangedDBPort(id, changed_port) {
             databasesData[id].port = changed_port
+            llView.model.setProperty(id, "port", changed_port)
         }
 
         function onSendStatusInfo(statusInfo) {
