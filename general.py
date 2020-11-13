@@ -9,12 +9,14 @@ import subprocess
 import os
 from PyQt5.QtCore import QObject, pyqtSlot
 
+from settings import Sets
+
 class GeneralFunc(QObject):
 
 
     def __init__(self):
         QObject.__init__(self)
-        #self.setts = setts
+        self.setts = Sets()
 
     @pyqtSlot()
     def openApp(self):
@@ -42,7 +44,15 @@ class GeneralFunc(QObject):
 
     def _openApp(self):
         
-        subprocess.run(['explorer', self.setts.addr])
+        name = self.setts.servers[0]['name']
+        port = self.setts.servers[0]['port']
+
+        if port == 80:
+            addr = f"http://{name}/"
+        else:
+            addr = f"http://{name}:{port}/"
+
+        subprocess.run(['explorer', addr])
 
     def _openAppFolder(self):
         url = os.path.abspath(os.path.join(self.setts.parent_folder, "Server"))
