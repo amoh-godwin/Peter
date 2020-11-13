@@ -17,6 +17,7 @@ class GeneralFunc(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.setts = Sets()
+        self.addr = self.setts.addr
 
     @pyqtSlot()
     def openApp(self):
@@ -44,15 +45,7 @@ class GeneralFunc(QObject):
 
     def _openApp(self):
         
-        name = self.setts.servers[0]['name']
-        port = self.setts.servers[0]['port']
-
-        if port == 80:
-            addr = f"http://{name}/"
-        else:
-            addr = f"http://{name}:{port}/"
-
-        subprocess.run(['explorer', addr])
+        subprocess.run(['explorer', self.addr])
 
     def _openAppFolder(self):
         url = os.path.abspath(os.path.join(self.setts.parent_folder, "Server"))

@@ -44,6 +44,7 @@ class Sets():
         self.passcode = None
         self._get_servers()
         self._get_databases()
+        self._get_addr(0)
 
     def _encrypt(self, data):
         return base64.b64encode(bytes(str(data), 'ascii'))
@@ -126,6 +127,18 @@ class Sets():
         with open(file_path, mode="wb") as sets_file:
             encoded_data = self._encrypt(self.settings)
             sets_file.write(encoded_data)
+
+    def _get_addr(self, id):
+        name = self.servers[id]['name']
+        port = self.servers[id]['port']
+
+        if port == 80:
+            addr = f"http://{name}/"
+        else:
+            addr = f"http://{name}:{port}/"
+
+        self.addr = addr
+        return addr
 
     def _get_servers(self):
         conn = sqlite3.connect('settings.db')
