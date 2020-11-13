@@ -4,9 +4,9 @@ conn = sqlite3.connect('settings.db')
 cursor = conn.cursor()
 
 def create_table():
-    sql = """CREATE TABLE database_processes (server_id real, pid real)"""
+    sql = """CREATE TABLE general (parent_folder text)"""
     cursor.execute(sql)
-    sql1 = """INSERT INTO database_processes VALUES (0, 0)"""
+    sql1 = """INSERT INTO general VALUES ('C:\\Deuteronomy Works\\Peter')"""
     cursor.execute(sql1)
     conn.commit()
 
