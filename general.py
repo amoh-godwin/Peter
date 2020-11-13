@@ -44,7 +44,6 @@ class GeneralFunc(QObject):
         sup_thread.start()
 
     def _openApp(self):
-        
         subprocess.run(['explorer', self.addr])
 
     def _openAppFolder(self):

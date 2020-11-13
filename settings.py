@@ -14,10 +14,16 @@ Server and Database db uses Table Columns
 - port
 - status
 
+
 server_processes and database_processes db uses Table Columns
 
 - server_id
 - pid
+
+
+general db uses Table Columns
+
+- parent_folder
 
 
 """
@@ -45,6 +51,7 @@ class Sets():
         self._get_servers()
         self._get_databases()
         self._get_addr(0)
+        self._get_general()
 
     def _encrypt(self, data):
         return base64.b64encode(bytes(str(data), 'ascii'))
@@ -139,6 +146,18 @@ class Sets():
 
         self.addr = addr
         return addr
+
+    def _get_general(self):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = """SELECT * FROM general"""
+        cursor.execute(sql)
+        gen = cursor.fetchone()
+
+        self.parent_folder = gen[0]
+
+        conn.commit()
+        conn.close()
 
     def _get_servers(self):
         conn = sqlite3.connect('settings.db')
