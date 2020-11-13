@@ -11,7 +11,7 @@ def create_table():
     conn.commit()
 
 def select():
-    sql = """SELECT * FROM database_processes"""
+    sql = """SELECT id FROM Servers"""
     cursor.execute(sql)
     al = cursor.fetchall()
     info = {}
