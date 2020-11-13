@@ -37,9 +37,7 @@ class Sets():
 
 
     def __init__(self):
-        super.__init__
-        self.sets_file = \
-        "3ddb429e2f446edae3406bb9d0799eed7bddda600d9a05fe01d3baaa.settings"
+        self.sets_file = ""
         self.settings = None
         self.server = None
         self.servers = None
@@ -67,14 +65,7 @@ class Sets():
             data = self._decrypt(sets_file.read())
             self.settings = json.loads(data)
 
-        self.parent_folder = self.settings[0]["parent_folder"]
-        self.server = self.settings[1]
         self.passcode = self.settings[0]['passcode']
-        self.port = self.server[0]["port"]
-        if self.port == 80:
-            self.addr = "http://localhost/"
-        else:
-            self.addr = "http://localhost:" + str(self.port) + "/"
 
     def change_server_port(self, id, new_port):
         conn = sqlite3.connect('settings.db')
