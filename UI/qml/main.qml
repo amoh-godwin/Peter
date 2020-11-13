@@ -15,8 +15,7 @@ ApplicationWindow {
     property QtObject llView
     property QtObject general
     property QtObject switcher
-    //property bool startEnabled: true
-    //property bool stopEnabled: false
+    property string warningMsg: ""
 
     signal openApp()
     signal openAppFolder()
@@ -35,8 +34,8 @@ ApplicationWindow {
     signal startAllDatabases()
     signal stopAllServers()
     signal stopAllDatabases()
-    signal changePort(string port)
-    signal changeDBPort(string port)
+    signal changePort(int id, string port)
+    signal changeDBPort(int id, string port)
     signal logServerEvent(int ind, string Message)
     signal logDatabaseEvent(int ind, string Message)
 
@@ -116,11 +115,11 @@ ApplicationWindow {
     }
 
     onChangePort: {
-        switcher.change_port(port)
+        switcher.change_port(id, port)
     }
 
     onChangeDBPort: {
-        switcher.change_db_port(port)
+        switcher.change_db_port(id, port)
     }
 
     onLogServerEvent: {
@@ -181,6 +180,57 @@ ApplicationWindow {
 
     }
 
+    Popup {
+        id: warningBox
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: 280
+        height: 200
+        modal: true
+        padding: 0
+
+        ColumnLayout {
+            width: parent.width - 2
+            height: parent.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 0
+
+            Rectangle {
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                Layout.preferredHeight: 36
+                color: "gold"
+
+                Text {
+                    leftPadding: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Warning"
+                    color: "white"
+                    font.pixelSize: 16
+                }
+            }
+
+
+            Text {
+                Layout.alignment: Qt.AlignCenter
+                text: warningMsg
+                font.pixelSize: 14
+                wrapMode: Text.WordWrap
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
+                Layout.bottomMargin: 8
+                text: "OK"
+
+                onClicked: warningBox.close()
+
+            }
+
+        }
+
+    }
+
     Connections {
         target: general
     }
@@ -198,14 +248,22 @@ ApplicationWindow {
             logDatabaseEvent(ret[0], ret[1])
         }
 
-        function onChangedPort(changed_port) {
-            var val = changed_port
-            serversData[0].port = val
+        function onChangedPort(id, changed_port) {
+            serversData[id].port = changed_port
+        }
+
+        function onChangedDBPort(id, changed_port) {
+            databasesData[id].port = changed_port
         }
 
         function onSendStatusInfo(statusInfo) {
             var ret = statusInfo
             serversData = ret
+        }
+
+        function onRejectPortChange(msg) {
+            warningMsg = msg;
+            warningBox.open()
         }
 
 

@@ -14,6 +14,11 @@ Server and Database db uses Table Columns
 - port
 - status
 
+server_processes and database_processes db uses Table Columns
+
+- server_id
+- pid
+
 
 """
 import os
@@ -62,6 +67,22 @@ class Sets():
             self.addr = "http://localhost/"
         else:
             self.addr = "http://localhost:" + str(self.port) + "/"
+
+    def change_server_port(self, id, new_port):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""UPDATE Servers SET port={new_port} WHERE id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
+    def change_database_port(self, id, new_port):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""UPDATE Databases SET port={new_port} WHERE id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
 
     def save_server_pid(self, id, pid):
         conn = sqlite3.connect('settings.db')

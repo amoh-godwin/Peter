@@ -1,6 +1,7 @@
 import threading
 import subprocess
 import os
+import socket
 
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
 import psutil
@@ -24,8 +25,9 @@ class Switcher(QObject):
     log = pyqtSignal(list, arguments=['logger'])
     logDB = pyqtSignal(list, arguments=['logger'])
     sendStatusInfo = pyqtSignal(list, arguments=['sendStatus'])
-    changedPort = pyqtSignal(str, arguments=['changed_port'])
-    changedDBPort = pyqtSignal(str, arguments=['changed_db_port'])
+    changedPort = pyqtSignal(int, str, arguments=['changed_port'])
+    changedDBPort = pyqtSignal(int, str, arguments=['changed_db_port'])
+    rejectPortChange = pyqtSignal(str, arguments=['_change_port', '_change_db_port'])
 
     @pyqtSlot()
     def getStatus(self):
@@ -149,43 +151,63 @@ class Switcher(QObject):
         self.setts.databases[index]['status'] = new_sts
 
     def logger(self, index, message):
-
         self.log.emit([index, message])
 
     def db_logger(self, index, message):
     
         self.logDB.emit([index, message])
 
-    @pyqtSlot(str)
-    def change_port(self, new_port):
+    @pyqtSlot(int, str)
+    def change_port(self, id, new_port):
         port_thread = threading.Thread(target=self._change_port,
-                                       args=[new_port])
+                                       args=[id, new_port])
         port_thread.daemon = True
         port_thread.start()
 
-    @pyqtSlot(str)
-    def change_db_port(self, new_port):
+    @pyqtSlot(int, str)
+    def change_db_port(self, id, new_port):
         port_thread = threading.Thread(target=self._change_db_port,
-                                       args=[new_port])
+                                       args=[id, new_port])
         port_thread.daemon = True
         port_thread.start()
 
-    def _change_port(self, new_port):
-        # changes the port
-        self.setts.server[0]["port"] = int(new_port)
-        # update UI code also
-        self.changed_port(new_port)
+    def _change_port(self, id, new_port):
+        if self.check_port(int(new_port)):
+            # changes the port
+            self.setts.servers[id]["port"] = int(new_port)
+            self.setts.change_server_port(id, int(new_port))
+            # update UI code also
+            self.changed_port(id, new_port)
+        else:
+            # reject the change
+            msg = "Port is already in Use. Use another one"
+            self.rejectPortChange.emit(msg)
 
-    def _change_db_port(self, new_port):
-        # changes the port
-        self.setts.server[0]["port"] = int(new_port)
-        # update UI code also
-        self.changed_db_port(new_port)
+    def _change_db_port(self, id, new_port):
+        if self.check_port(int(new_port)):
+            # changes the port
+            self.setts.servers[id]["port"] = int(new_port)
+            self.setts.change_database_port(id, int(new_port))
+            # update UI code also
+            self.changed_db_port(id, new_port)
+        else:
+            # reject the change
+            msg = "Port is already in Use. Use another one"
+            self.rejectPortChange.emit(msg)
 
-    def changed_port(self, new_port):
+    def changed_port(self, id, new_port):
         # send to Qml layer
-        self.changedPort.emit(new_port)
+        self.changedPort.emit(id, new_port)
 
-    def changed_db_port(self, new_port):
+    def changed_db_port(self, id, new_port):
         # send to Qml layer
-        self.changedDBPort.emit(new_port)
+        self.changedDBPort.emit(id, new_port)
+
+    def check_port(self, port):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            # in use
+            s.connect(('127.0.0.1', port))
+            return False
+        except:
+            return True

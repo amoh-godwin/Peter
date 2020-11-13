@@ -102,7 +102,10 @@ Component {
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Configure")
 
-                        onClicked: configureBox.open()
+                        onClicked: {
+                            port_field.text = serversData[lView.currentIndex].port.toString()
+                            configureBox.open()
+                        }
 
                     }
 
@@ -185,7 +188,7 @@ Component {
                         text: "Save"
 
                         onClicked: {
-                            changePort(port_field.text)
+                            changePort(lView.model.get(lView.currentIndex).id, port_field.text)
                             configureBox.close()
                         }
 

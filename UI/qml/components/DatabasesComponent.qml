@@ -102,7 +102,10 @@ Component {
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTr("Configure")
 
-                        onClicked: configureBox.open()
+                        onClicked: {
+                            port_field.text = databasesData[lView.currentIndex].port.toString()
+                            configureBox.open()
+                        }
 
                     }
 
@@ -186,7 +189,7 @@ Component {
                         text: "Save"
 
                         onClicked: {
-                            changeDBPort(port_field.text)
+                            changeDBPort(lView.model.get(lView.currentIndex).id, port_field.text)
                             configureBox.close()
                         }
 
