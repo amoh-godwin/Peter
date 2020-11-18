@@ -4,9 +4,22 @@ Created on Sat Sep  7 10:44:51 2019
 
 @author: Ampofo
 
-Server and Database db uses Table Columns
+Servers db uses Table Columns
 
 - id
+- uip
+- uname
+- upath
+- default_port
+- port
+- status
+
+
+Databases db uses Table Columns
+
+- id
+- username
+- passcode
 - uip
 - uname
 - upath
@@ -197,3 +210,7 @@ class Sets():
         conn.close()
         self.databases = databases
         return self.databases
+
+s = Sets()
+s._get_servers()
+print(s.servers)
