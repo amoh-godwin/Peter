@@ -25,7 +25,7 @@ switcher = Switcher()
 
 engine = QQmlApplicationEngine()
 
-engine.load("./UI/qml/main.qml")
+engine.load(":/UI/qml/main.qml")
 
 engine.rootObjects()[0].setProperty("general", gen_func)
 engine.rootObjects()[0].setProperty("switcher", switcher)

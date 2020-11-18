@@ -10,5 +10,10 @@
         <file>UI/qml/components/WelcomeComponent.qml</file>
         <file>UI/qml/components/WelcomeComponent.qmlc</file>
         <file>UI/images/Peter.png</file>
+        <file>UI/qml/components/DatabaseCompSettings.qml</file>
+        <file>UI/qml/components/DatabasesComponent.qml</file>
+        <file>UI/qml/components/DatabasesDelegate.qml</file>
+        <file>UI/qml/components/DatabasesModel.qml</file>
+        <file>UI/qml/components/ServerCompSettings.qml</file>
     </qresource>
 </RCC>
