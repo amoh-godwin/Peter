@@ -210,7 +210,3 @@ class Sets():
         conn.close()
         self.databases = databases
         return self.databases
-
-s = Sets()
-s._get_servers()
-print(s.servers)
