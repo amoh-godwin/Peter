@@ -97,6 +97,8 @@ class Sets():
         conn.close()
 
     def save_server_pid(self, id, pid):
+        id = int(id)
+        pid = int(pid)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         sql = f"""UPDATE server_processes SET pid={pid} WHERE server_id={id}"""
@@ -105,6 +107,8 @@ class Sets():
         conn.close()
 
     def save_database_pid(self, id, pid):
+        id = int(id)
+        pid = int(pid)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         sql = f"""UPDATE database_processes SET pid={pid} WHERE server_id={id}"""
@@ -113,6 +117,7 @@ class Sets():
         conn.close()
 
     def remove_server_pid(self, id):
+        id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         pid = 0
@@ -122,6 +127,7 @@ class Sets():
         conn.close()
 
     def remove_database_pid(self, id):
+        id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         pid = 0
@@ -212,6 +218,7 @@ class Sets():
         return self.databases
 
     def get_server_pid(self, id):
+        id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         sql = f"""SELECT `pid` FROM server_processes WHERE server_id={id}"""
@@ -223,6 +230,7 @@ class Sets():
         return pids[0]
 
     def get_database_pid(self, id):
+        id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         sql = f"""SELECT `pid` FROM database_processes WHERE server_id={id}"""
@@ -234,6 +242,7 @@ class Sets():
         return pids[0]
 
     def _save_server_status(self, id, status):
+        id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         sql = f"""UPDATE Servers SET status={status} WHERE id={id}"""
@@ -242,6 +251,7 @@ class Sets():
         conn.close()
 
     def _save_database_status(self, id, status):
+        id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
         sql = f"""UPDATE Databases SET status={status} WHERE id={id}"""
