@@ -146,9 +146,11 @@ class Switcher(QObject):
 
     def _updateServerStatus(self, index, new_sts):
         self.setts.servers[index]['status'] = new_sts
+        self.setts._save_server_status(index, new_sts)
 
     def _updateDatabaseStatus(self, index, new_sts):
         self.setts.databases[index]['status'] = new_sts
+        self.setts._save_database_status(index, new_sts)
 
     def logger(self, index, message):
         self.log.emit([index, message])
