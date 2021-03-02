@@ -109,7 +109,8 @@ class Switcher(QObject):
         return True
 
     def _stopWebServer(self, id):
-        pid = self.web_sProc[id]
+        # pid = self.web_sProc[id]
+        pid = self.setts.get_server_pid(id)
         p = psutil.Process(pid)
         p.terminate()
 
@@ -135,7 +136,8 @@ class Switcher(QObject):
         return True
 
     def _stopMySQL(self, id):
-        pid = self.mysql_sProc[id]
+        # pid = self.mysql_sProc[id]
+        pid = self.setts.get_database_pid(id)
         p = psutil.Process(pid)
         p.terminate()
 
