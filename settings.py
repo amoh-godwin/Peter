@@ -211,6 +211,28 @@ class Sets():
         self.databases = databases
         return self.databases
 
+    def get_server_pid(self, id):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""SELECT `pid` FROM server_processes WHERE server_id={id}"""
+        cursor.execute(sql)
+        pids = cursor.fetchone()
+        print(pids)
+        conn.commit()
+        conn.close()
+        return pids[0]
+
+    def get_database_pid(self, id):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""SELECT `pid` FROM database_processes WHERE server_id={id}"""
+        cursor.execute(sql)
+        pids = cursor.fetchone()
+        print(pids)
+        conn.commit()
+        conn.close()
+        return pids[0]
+
     def _save_server_status(self, id, status):
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
