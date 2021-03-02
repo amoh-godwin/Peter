@@ -210,3 +210,19 @@ class Sets():
         conn.close()
         self.databases = databases
         return self.databases
+
+    def _save_server_status(self, id, status):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""UPDATE Servers SET status={status} WHERE id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
+    def _save_database_status(self, id, status):
+        conn = sqlite3.connect('settings.db')
+        cursor = conn.cursor()
+        sql = f"""UPDATE Databases SET status={status} WHERE id={id}"""
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
