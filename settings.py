@@ -241,20 +241,20 @@ class Sets():
         conn.close()
         return pids[0]
 
-    def _save_server_status(self, id, status):
+    def _save_server_status(self, id, new_status):
         id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
-        sql = f"""UPDATE Servers SET status={status} WHERE id={id}"""
+        sql = f"""UPDATE Servers SET status='{new_status}' WHERE id={id}"""
         cursor.execute(sql)
         conn.commit()
         conn.close()
 
-    def _save_database_status(self, id, status):
+    def _save_database_status(self, id, new_status):
         id = int(id)
         conn = sqlite3.connect('settings.db')
         cursor = conn.cursor()
-        sql = f"""UPDATE Databases SET status={status} WHERE id={id}"""
+        sql = f"""UPDATE Databases SET status='{new_status}' WHERE id={id}"""
         cursor.execute(sql)
         conn.commit()
         conn.close()
