@@ -120,7 +120,7 @@ class Switcher(QObject):
         return True
 
     def _startMySQL(self, id):
-        path = os.path.join(self.setts.databases[id]["path"], "mysqld")
+        path = os.path.join(self.setts.databases[id]["path"], "bin", "mysqld")
         print(path)
         proc = subprocess.Popen(
                 [path],

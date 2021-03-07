@@ -199,11 +199,11 @@ class Sets():
         databases = []
         for db in all_db:
             info['id'] = int(db[0])
-            info['name'] = db[2]
-            info['path'] = db[3]
-            info['default_port'] = int(db[4])
-            info['port'] = int(db[5])
-            info['status'] = db[6]
+            info['name'] = db[4]
+            info['path'] = db[5]
+            info['default_port'] = int(db[6])
+            info['port'] = int(db[7])
+            info['status'] = db[8]
 
             databases.append(info)
 
