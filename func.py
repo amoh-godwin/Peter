@@ -109,9 +109,16 @@ class Switcher(QObject):
         return True
 
     def _stopWebServer(self, id):
-        pid = self.web_sProc[id]
-        p = psutil.Process(pid)
-        p.terminate()
+        # pid = self.web_sProc[id]
+        pid = self.setts.get_server_pid(id)
+
+        try:
+            p = psutil.Process(int(pid))
+            p.terminate()
+        except:
+            # psutil.NoSuchProcess
+            # probably
+            pass
 
         # remove the pid
         self.web_sProc[id] = None
@@ -135,9 +142,16 @@ class Switcher(QObject):
         return True
 
     def _stopMySQL(self, id):
-        pid = self.mysql_sProc[id]
-        p = psutil.Process(pid)
-        p.terminate()
+        # pid = self.mysql_sProc[id]
+        pid = self.setts.get_database_pid(id)
+        
+        try:
+            p = psutil.Process(int(pid))
+            p.terminate()
+        except:
+            # psutil.NoSuchProcess
+            # probably
+            pass
 
         # remove the pid
         self.mysql_sProc[id] = None
@@ -146,9 +160,11 @@ class Switcher(QObject):
 
     def _updateServerStatus(self, index, new_sts):
         self.setts.servers[index]['status'] = new_sts
+        self.setts._save_server_status(index, new_sts)
 
     def _updateDatabaseStatus(self, index, new_sts):
         self.setts.databases[index]['status'] = new_sts
+        self.setts._save_database_status(index, new_sts)
 
     def logger(self, index, message):
         self.log.emit([index, message])
