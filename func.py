@@ -94,7 +94,6 @@ class Switcher(QObject):
         self.db_logger(id, 'Stopped')
 
     def _startWebServer(self, id):
-        print(self.setts.servers[id]["path"])
         proc = subprocess.Popen([self.setts.servers[id]["path"],
                                            str(self.setts.servers[id]["port"])],
                                            stdout=subprocess.PIPE,
@@ -128,7 +127,6 @@ class Switcher(QObject):
 
     def _startMySQL(self, id):
         path = os.path.join(self.setts.databases[id]["path"], "bin", "mysqld")
-        print(path)
         proc = subprocess.Popen(
                 [path],
                  stdout=subprocess.PIPE,
