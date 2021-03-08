@@ -224,10 +224,9 @@ class Sets():
         sql = f"""SELECT `pid` FROM server_processes WHERE server_id={id}"""
         cursor.execute(sql)
         pids = cursor.fetchone()
-        print(pids)
         conn.commit()
         conn.close()
-        return pids[0]
+        return int(pids[0])
 
     def get_database_pid(self, id):
         id = int(id)
