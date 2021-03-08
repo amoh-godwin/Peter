@@ -1,12 +1,16 @@
 # -*- mode: python -*-
+import os
 
 block_cipher = None
 
 
+wd = os.path.realpath('.')
+icon_path = os.path.join(wd, "UI", "images", "PeterIcon.ico")
+
 a = Analysis(['Peter.py'],
-             pathex=['H:\\GitHub\\Peter'],
+             pathex=[wd],
              binaries=[],
-             datas=[("H:\\GitHub\\Peter\\peter.rcc", ".")],
+             datas=[(os.path.join(wd, "peter.rcc"), ".")],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -26,8 +30,8 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          icon="H:\\GitHub\\Peter\\UI\\images\\PeterIcon.ico",
-          console=False )
+          icon=icon_path,
+          console=True )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
