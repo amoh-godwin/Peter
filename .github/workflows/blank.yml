@@ -26,6 +26,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      # Use Python3
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
       # Runs a single command using the runners shell
       - name: Install dependencies
         run: pip install PyQt5 pyinstaller
@@ -35,3 +41,21 @@ jobs:
         run: |
           pyinstaller Peter.spec
           python uploader.py ${{ matrix.os }} ${{ secrets.ACCESS_TOKEN }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
